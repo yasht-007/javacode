@@ -201,8 +201,6 @@ public class PingUtility {
 
                             if (provisioningOption.toLowerCase().trim().equals("no")) {
 
-                                System.err.println("\nDiscovery name or Ip Address already exist. Please provide unique Discovery name and Ip address");
-
                                 System.out.println("Press enter to continue : ");
 
                                 reader.readLine();
