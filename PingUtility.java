@@ -4,9 +4,14 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PingUtility {
+
+    static final String greenColor = "\u001B[32m"; // ANSI escape code for green color
+    static final String resetColor = "\u001B[0m"; // ANSI escape code to reset color to default
+
     private static boolean buildProcessAndGetOutput(String discoveryName, String ipAddresses) {
 
         BufferedReader stdInputReader = null;
@@ -27,27 +32,33 @@ public class PingUtility {
 
             process = processBuilder.start();
 
-            process.waitFor();
+            if (process.waitFor() == 0) {
 
-            stdInputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                stdInputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            pingOutput = stdInputReader.readLine();
+                pingOutput = stdInputReader.readLine();
 
-            for (int index = 0; index < pingOutput.split("\n").length; index++) {
+                for (int index = 0; index < pingOutput.split("\n").length; index++) {
 
-                String[] filteredResult = pingOutput.split("\n")[index].split(":")[1].split("=")[1].split("/");
+                    String[] filteredResult = pingOutput.split("\n")[index].split(":")[1].split("=")[1].split("/");
 
-                if (filteredResult[0].trim().equals(filteredResult[1].trim()) && filteredResult[2].substring(0, filteredResult[2].indexOf("%")).equals("0")) {
+                    if (filteredResult[0].trim().equals(filteredResult[1].trim()) && filteredResult[2].substring(0, filteredResult[2].indexOf("%")).equals("0")) {
 
-                    pingFlag = true;
+                        pingFlag = true;
 
-                    System.out.println(discoveryName + " : " + pingOutput.split("\n")[index].split(":")[0].trim() + " is Up (Active)");
+                        System.out.println(discoveryName + " : " + pingOutput.split("\n")[index].split(":")[0].trim() + " is Up (Active)");
 
-                } else {
+                    } else {
 
-                    System.out.println(pingOutput.split("\n")[index].split(":")[0].trim() + " is Down (Inactive)");
+                        System.out.println(pingOutput.split("\n")[index].split(":")[0].trim() + " is Down (Inactive)");
+
+                    }
 
                 }
+
+            } else {
+
+                System.err.println("Process abnormally terminated");
 
             }
 
@@ -139,8 +150,6 @@ public class PingUtility {
 
         BufferedReader outputReader = null;
 
-        String pingOutput;
-
         while (true) {
 
             try {
@@ -159,19 +168,25 @@ public class PingUtility {
 
                 process = processBuilder.start();
 
-                process.waitFor();
+                if (process.waitFor() == 0) {
 
-                outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-                outputWriter = new BufferedWriter(new FileWriter(outputFile, true));
+                    outputWriter = new BufferedWriter(new FileWriter(outputFile, true));
 
-                outputWriter.write(System.currentTimeMillis() + " : " + outputReader.readLine());
+                    outputWriter.write(System.currentTimeMillis() + " : " + outputReader.readLine());
 
-                outputWriter.newLine();
+                    outputWriter.newLine();
 
-                outputWriter.flush();
+                    outputWriter.flush();
 
-                Thread.sleep(5000);
+                    Thread.sleep(5000);
+
+                } else {
+
+                    System.out.println("Process abnormally terminated");
+
+                }
 
             } catch (Exception exception) {
 
@@ -210,6 +225,28 @@ public class PingUtility {
 
     }
 
+    private static boolean isValidIpAddress(String ipAddress) {
+
+        String regex = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
+                "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(ipAddress);
+
+        if (matcher.matches()) {
+
+            return true;
+
+        } else {
+
+            System.err.println("\nPlease enter valid Ip Address\n");
+
+            return false;
+
+        }
+    }
+
     public static void main(String[] args) {
 
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -230,83 +267,80 @@ public class PingUtility {
 
                 var choice = Integer.parseInt(reader.readLine());
 
-                switch (choice) {
+                if (choice == 1) {
 
-                    case 1:
+                    String discoveryName, ipAddress;
 
-                        String discoveryName, ipAddress;
+                    System.out.print("\nPlease enter unique discovery name : ");
 
-                        System.out.print("\nPlease enter unique discovery name : ");
+                    discoveryName = reader.readLine();
 
-                        discoveryName = reader.readLine();
+                    System.out.print("\nPlease enter IP Address that you want to ping : ");
 
-                        System.out.print("\nPlease enter IP Address that you want to ping : ");
+                    ipAddress = reader.readLine();
 
-                        ipAddress = reader.readLine();
+                    if (!isValidIpAddress(ipAddress)) {
 
-                        if (!(isNameUnique(discoveryName))) {
+                        continue;
 
-                            System.err.println("\nDiscovery name or Ip Address already exist. Please provide unique Discovery name and Ip address");
+                    }
 
-                            System.out.println("Press enter to continue : ");
+                    if (!(isNameUnique(discoveryName))) {
+
+                        System.err.println("\nDiscovery name or Ip Address already exist. Please provide unique Discovery name and Ip address");
+
+                        System.out.println("Press enter to continue : ");
+
+                    } else {
+
+                        writer = new BufferedWriter(new FileWriter("/home/yash/PingOutputs/Discovery.txt", true));
+
+                        writer.write(discoveryName.toLowerCase().trim() + "\n" + ipAddress.trim() + "\n");
+
+                        writer.newLine();
+
+                        writer.flush();
+
+                        pingFlag = buildProcessAndGetOutput(discoveryName, ipAddress);
+
+                        if (pingFlag) {
+
+                            String provisioningOption;
+
+                            System.out.print("\nDo you want to start provisioning? (yes/no) : ");
+
+                            provisioningOption = reader.readLine();
+
+                            if (provisioningOption.toLowerCase().trim().equals("no")) {
+
+                                System.out.println("Press enter to continue : ");
+
+                                reader.readLine();
+
+                            } else if (provisioningOption.toLowerCase().trim().equals("yes")) {
+
+                                System.out.println("\n" + greenColor + "Your provisioning task for " + ipAddress + " has been successfully assigned" + resetColor);
+
+                                executor.execute(() -> startPolling(ipAddress, discoveryName));
+
+                            }
 
                         } else {
 
-                            writer = new BufferedWriter(new FileWriter("/home/yash/PingOutputs/Discovery.txt", true));
-
-                            writer.write(discoveryName.toLowerCase().trim() + "\n" + ipAddress.trim() + "\n");
-
-                            writer.newLine();
-
-                            writer.flush();
-
-                            pingFlag = buildProcessAndGetOutput(discoveryName, ipAddress);
-
-                            if (pingFlag) {
-
-                                String provisioningOption;
-
-                                System.out.print("\nDo you want to start provisioning? (yes/no) : ");
-
-                                provisioningOption = reader.readLine();
-
-                                if (provisioningOption.toLowerCase().trim().equals("no")) {
-
-                                    System.out.println("Press enter to continue : ");
-
-                                    reader.readLine();
-
-                                } else if (provisioningOption.toLowerCase().trim().equals("yes")) {
-
-                                    System.out.println("\nYour provisioning task for " + ipAddress + " has been successfully assigned");
-
-                                    executor.execute(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-
-                                            startPolling(ipAddress, discoveryName);
-
-                                        }
-
-                                    });
-
-                                }
-                            }
+                            System.err.println("\n" + ipAddress + " is unreachable\n");
 
                         }
 
-                        break;
+                    }
 
-                    default:
+                } else {
 
-                        System.err.println("Please enter valid choice");
-
-                        break;
+                    System.err.println("Please enter valid choice");
 
                 }
 
             }
+
 
         } catch (Exception exception) {
 
