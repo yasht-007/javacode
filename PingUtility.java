@@ -1,19 +1,20 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PingUtility {
-
+public class PingUtility
+{
     static final String greenColor = "\u001B[32m"; // ANSI escape code for green color
     static final String resetColor = "\u001B[0m"; // ANSI escape code to reset color to default
 
-    private static boolean buildProcessAndGetOutput(String discoveryName, String ipAddresses) {
-
+    private static boolean buildProcessAndGetOutput(String discoveryName, String ipAddresses)
+    {
         BufferedReader stdInputReader = null;
 
         Process process = null;
@@ -22,7 +23,8 @@ public class PingUtility {
 
         boolean pingFlag = false;
 
-        try {
+        try
+        {
 
             System.out.println("\nPlease wait, we are going to ping " + ipAddresses + " ......\n");
 
@@ -32,23 +34,27 @@ public class PingUtility {
 
             process = processBuilder.start();
 
-            if (process.waitFor() == 0) {
-
+            if (process.waitFor() == 0)
+            {
                 stdInputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
                 pingOutput = stdInputReader.readLine();
 
-                for (int index = 0; index < pingOutput.split("\n").length; index++) {
+                for (int index = 0; index < pingOutput.split("\n").length; index++)
+                {
 
                     String[] filteredResult = pingOutput.split("\n")[index].split(":")[1].split("=")[1].split("/");
 
-                    if (filteredResult[0].trim().equals(filteredResult[1].trim()) && filteredResult[2].substring(0, filteredResult[2].indexOf("%")).equals("0")) {
+                    if (filteredResult[0].trim().equals(filteredResult[1].trim()) && filteredResult[2].substring(0, filteredResult[2].indexOf("%")).equals("0"))
+                    {
 
                         pingFlag = true;
 
                         System.out.println(discoveryName + " : " + pingOutput.split("\n")[index].split(":")[0].trim() + " is Up (Active)");
 
-                    } else {
+                    }
+                    else
+                    {
 
                         System.out.println(pingOutput.split("\n")[index].split(":")[0].trim() + " is Down (Inactive)");
 
@@ -56,25 +62,44 @@ public class PingUtility {
 
                 }
 
-            } else {
+            }
+            else
+            {
 
                 System.err.println("Process abnormally terminated");
 
             }
 
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
 
             exception.printStackTrace();
 
-        } finally {
+        }
+        finally
+        {
 
-            try {
+            try
+            {
 
-                if (stdInputReader != null) stdInputReader.close();
+                if (stdInputReader != null)
+                {
 
-                if (process != null) process.destroy();
+                    stdInputReader.close();
 
-            } catch (Exception exception) {
+                }
+
+                if (process != null)
+                {
+
+                    process.destroy();
+
+                }
+
+            }
+            catch (Exception exception)
+            {
 
                 exception.printStackTrace();
 
@@ -86,7 +111,8 @@ public class PingUtility {
 
     }
 
-    private static void displayOptions() {
+    private static void displayOptions()
+    {
 
         System.out.println("\nPlease enter a choice to proceed : \n");
 
@@ -96,51 +122,8 @@ public class PingUtility {
 
     }
 
-    private static boolean isNameUnique(String discoveryName) {
-
-        boolean uniqueFlag = true;
-
-        Scanner scanner = null;
-
-        try {
-
-            scanner = new Scanner(new FileReader("/home/yash/PingOutputs/Discovery.txt"));
-
-            while (scanner.hasNext()) {
-
-                if (scanner.nextLine().trim().equals(discoveryName)) {
-
-                    uniqueFlag = false;
-
-                    break;
-                }
-
-            }
-
-        } catch (Exception exception) {
-
-            exception.printStackTrace();
-
-        } finally {
-
-            try {
-
-                if (scanner != null)
-
-                    scanner.close();
-
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-
-            }
-
-        }
-
-        return uniqueFlag;
-    }
-
-    private static void startPolling(String ipAddress, String discoveryName) {
+    private static void startPolling(Map<String, String> provisionProfiles)
+    {
 
         Process process = null;
 
@@ -150,95 +133,118 @@ public class PingUtility {
 
         BufferedReader outputReader = null;
 
-        while (true) {
+        try
+        {
 
-            try {
+            var processBuilder = new ProcessBuilder(new ArrayList<>(Arrays.asList("bash", "-c", "fping -c 3 -q " + String.join(" ", provisionProfiles.keySet()))));
 
-                outputFile = new File("/home/yash/PingOutputs/" + discoveryName + " - " + ipAddress + " provisioning.txt");
+            processBuilder.redirectErrorStream(true);
 
-                if (!(outputFile.exists())) {
+            process = processBuilder.start();
 
-                    outputFile.createNewFile();
+            if (process.waitFor() == 0)
+            {
 
-                }
+                outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-                var processBuilder = new ProcessBuilder(new ArrayList<>(Arrays.asList("bash", "-c", "fping -c 3 -q " + ipAddress)));
+                String output;
 
-                processBuilder.redirectErrorStream(true);
+                while ((output = outputReader.readLine()) != null)
+                {
+                    outputFile = new File("/home/yash/PingOutputs/" + provisionProfiles.get(output.split(":")[0].trim()) + " - " + output.split(":")[0].trim() + " provisioning.txt");
 
-                process = processBuilder.start();
+                    if (!(outputFile.exists()))
+                    {
 
-                if (process.waitFor() == 0) {
+                        outputFile.createNewFile();
 
-                    outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    }
 
                     outputWriter = new BufferedWriter(new FileWriter(outputFile, true));
 
-                    outputWriter.write(System.currentTimeMillis() + " : " + outputReader.readLine());
+                    outputWriter.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " : " + output);
 
                     outputWriter.newLine();
 
                     outputWriter.flush();
 
-                    Thread.sleep(5000);
-
-                } else {
-
-                    System.out.println("Process abnormally terminated");
-
-                }
-
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-
-            } finally {
-
-                try {
-
-                    if (process != null) {
-
-                        process.destroy();
-
-                    }
-
-                    if (outputReader != null) {
-
-                        outputReader.close();
-
-                    }
-
-                    if (outputWriter != null) {
-
-                        outputReader.close();
-
-                    }
-
-                } catch (Exception exception) {
-
-                    exception.printStackTrace();
-
                 }
 
             }
+
+            else
+            {
+
+                System.out.println("Process abnormally terminated");
+
+            }
+
+        }
+
+        catch (Exception exception)
+        {
+
+            exception.printStackTrace();
+
+        }
+
+        finally
+        {
+            try
+            {
+
+                if (outputReader != null)
+                {
+
+                    outputReader.close();
+
+                }
+
+                if (outputWriter != null)
+                {
+
+                    outputReader.close();
+
+                }
+
+                if (process != null)
+                {
+
+                    process.destroy();
+
+                }
+
+
+            }
+
+            catch (Exception exception)
+            {
+
+                exception.printStackTrace();
+
+            }
+
         }
 
     }
 
-    private static boolean isValidIpAddress(String ipAddress) {
+    private static boolean isValidIpAddress(String ipAddress)
+    {
 
-        String regex = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
-                "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        String regex = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
         Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(ipAddress);
 
-        if (matcher.matches()) {
+        if (matcher.matches())
+        {
 
             return true;
 
-        } else {
+        }
+        else
+        {
 
             System.err.println("\nPlease enter valid Ip Address\n");
 
@@ -247,29 +253,39 @@ public class PingUtility {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
 
-        ExecutorService executor = Executors.newCachedThreadPool();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
         BufferedReader reader = null;
 
         BufferedWriter writer = null;
 
+        Map<String, String> profiles = new HashMap<>();
+
+        Map<String, String> provisionProfiles = new LinkedHashMap<>();
+
         boolean pingFlag;
 
-        try {
+        try
+        {
 
             reader = new BufferedReader(new InputStreamReader(System.in));
 
-            while (true) {
+            while (true)
+            {
 
                 displayOptions();
 
                 var choice = Integer.parseInt(reader.readLine());
 
-                if (choice == 1) {
+                if (choice == 1)
+                {
 
-                    String discoveryName, ipAddress;
+                    String discoveryName;
+
+                    String ipAddress;
 
                     System.out.print("\nPlease enter unique discovery name : ");
 
@@ -279,31 +295,28 @@ public class PingUtility {
 
                     ipAddress = reader.readLine();
 
-                    if (!isValidIpAddress(ipAddress)) {
+                    if (!isValidIpAddress(ipAddress))
+                    {
 
                         continue;
 
                     }
 
-                    if (!(isNameUnique(discoveryName))) {
+                    if (profiles.putIfAbsent(discoveryName.toLowerCase().trim(), ipAddress.trim()) != null)
+                    {
 
                         System.err.println("\nDiscovery name or Ip Address already exist. Please provide unique Discovery name and Ip address");
 
                         System.out.println("Press enter to continue : ");
 
-                    } else {
-
-                        writer = new BufferedWriter(new FileWriter("/home/yash/PingOutputs/Discovery.txt", true));
-
-                        writer.write(discoveryName.toLowerCase().trim() + "\n" + ipAddress.trim() + "\n");
-
-                        writer.newLine();
-
-                        writer.flush();
+                    }
+                    else
+                    {
 
                         pingFlag = buildProcessAndGetOutput(discoveryName, ipAddress);
 
-                        if (pingFlag) {
+                        if (pingFlag)
+                        {
 
                             String provisioningOption;
 
@@ -311,21 +324,19 @@ public class PingUtility {
 
                             provisioningOption = reader.readLine();
 
-                            if (provisioningOption.toLowerCase().trim().equals("no")) {
-
-                                System.out.println("Press enter to continue : ");
-
-                                reader.readLine();
-
-                            } else if (provisioningOption.toLowerCase().trim().equals("yes")) {
+                            if (provisioningOption.toLowerCase().trim().equals("yes"))
+                            {
+                                provisionProfiles.put(ipAddress, discoveryName);
 
                                 System.out.println("\n" + greenColor + "Your provisioning task for " + ipAddress + " has been successfully assigned" + resetColor);
 
-                                executor.execute(() -> startPolling(ipAddress, discoveryName));
+                                executorService.scheduleAtFixedRate(() -> startPolling(provisionProfiles), 0, 5, TimeUnit.SECONDS);
 
                             }
 
-                        } else {
+                        }
+                        else
+                        {
 
                             System.err.println("\n" + ipAddress + " is unreachable\n");
 
@@ -333,7 +344,9 @@ public class PingUtility {
 
                     }
 
-                } else {
+                }
+                else
+                {
 
                     System.err.println("Please enter valid choice");
 
@@ -342,29 +355,38 @@ public class PingUtility {
             }
 
 
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
 
             exception.printStackTrace();
 
-        } finally {
+        }
+        finally
+        {
 
-            try {
+            try
+            {
 
-                executor.shutdown();
+                //   executor.shutdown();
 
-                if (reader != null) {
+                if (reader != null)
+                {
 
                     reader.close();
 
                 }
 
-                if (writer != null) {
+                if (writer != null)
+                {
 
                     writer.close();
 
                 }
 
-            } catch (Exception exception) {
+            }
+            catch (Exception exception)
+            {
 
                 exception.printStackTrace();
 
