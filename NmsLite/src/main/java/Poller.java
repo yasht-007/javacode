@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,56 +8,29 @@ import java.util.Map;
 class Poller
 {
     Process process = null;
-
     BufferedWriter outputWriter = null;
-
     BufferedReader outputReader = null;
-
     void startPolling(List<CredentialProfile> credentialProfile, int index)
     {
-        int exitCode;
+        String ip = credentialProfile.get(index).getIp();
+
+        String disoveryName = credentialProfile.get(index).getDiscoveryName();
+
+        String dateTime;
 
         try
         {
-            List<String> command = new ArrayList<>();
 
-            command.add("fping");
+            dateTime = new BuildProcess().poll(ip, disoveryName);
 
-            command.add("-c");
-
-            command.add("3");
-
-            command.add("-q");
-
-            command.add(credentialProfile.get(index).getIp());
-
-            var processBuilder = new ProcessBuilder(command);
-
-            processBuilder.redirectErrorStream(true);
-
-            process = processBuilder.start();
-
-            exitCode = process.waitFor();
-
-            if (exitCode == 0)
+            if (dateTime != null)
             {
-
-                outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                outputWriter = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + credentialProfile.get(index).getDiscoveryName() + " - " + " poll.log", true));
-
-                outputWriter.write(LocalDateTime.now().format(DateTimeFormatter.ofPattern(FormatUtility.DATE_TIME_FORMAT)) + " : " + outputReader.readLine());
-
-                outputWriter.newLine();
-
-                outputWriter.flush();
-
-
+                new SSHClient().poll(credentialProfile.get(index).getUserName(), ip, credentialProfile.get(index).getPassword(), credentialProfile.get(index).getPort(), dateTime, disoveryName);
             }
 
             else
             {
-                System.err.println("Process exited with status code " + exitCode);
+                System.out.println("Date Time");
             }
 
         }

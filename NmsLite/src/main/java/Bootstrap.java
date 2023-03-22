@@ -114,6 +114,15 @@ public class Bootstrap
 
                             System.out.println(FormatUtility.NEW_LINE_SEPARATOR + FormatUtility.GREEN_COLOUR + "Your provisioning task for " + ip + " has been successfully assigned" + FormatUtility.RESET_COLOUR);
 
+                            File file = new File(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log");
+
+                            if (!file.exists() && !file.mkdir())
+                            {
+                                System.err.println("Couldn't make file directory for " + discoveryName);
+
+                                continue;
+                            }
+
                             executor.execute(() -> {
 
                                 int profileIndex = ++index;
@@ -124,7 +133,7 @@ public class Bootstrap
                                 {
                                     long currentTime = System.currentTimeMillis();
 
-                                    if ((currentTime - startTime) >= 5000)
+                                    if ((currentTime - startTime) >= 20000)
                                     {
                                         startTime = currentTime;
 

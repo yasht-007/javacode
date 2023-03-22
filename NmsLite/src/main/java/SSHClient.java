@@ -51,13 +51,17 @@ public class SSHClient
     }
 
 
-    void poll(String userName, String hostName, String password, int port)
+    void poll(String userName, String hostName, String password, int port, String dateTime, String discoveryName)
     {
         Channel channel = null;
 
-        OutputStream outputStream = null;
+        InputStream inputStream = null;
 
-        PrintStream commander = null;
+        BufferedWriter writer = null;
+
+        BufferedReader reader = null;
+
+        String command;
 
         try
         {
@@ -65,26 +69,21 @@ public class SSHClient
 
             config.put("StrictHostKeyChecking", "no");
 
-            if (jSch != null)
+            session = jSch.getSession(userName, hostName, port);
+
+            if (session != null)
             {
-                session = jSch.getSession(userName, hostName, port);
+                session.setPassword(password);
 
-                if (session != null)
-                {
-                    session.setPassword(password);
+                session.setConfig(config);
 
-                    session.setConfig(config);
-
-                    session.connect();
-
-                    System.out.println(session.isConnected());
-                }
-
-                System.out.println("Connected to the Remote PC ");
+                session.connect();
 
                 channel = session.openChannel("exec");
 
-                ((ChannelExec) channel).setCommand("mpstat -P ALL; free");
+                command = "mpstat -P ALL | awk 'NR>3'";
+
+                ((ChannelExec) channel).setCommand(command);
 
                 channel.connect();
 
@@ -92,32 +91,29 @@ public class SSHClient
 
                 ((ChannelExec) channel).setErrStream(System.err);
 
-                InputStream in = channel.getInputStream();
+                inputStream = channel.getInputStream();
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                writer = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "cpustats.txt", true));
 
                 String output;
 
+                writer.write("Time : " + dateTime + FormatUtility.NEW_LINE_SEPARATOR);
+
                 while ((output = reader.readLine()) != null)
                 {
-                    // Nikunj write code here...
-                    System.out.println(output);
+                    String[] cpuStat = output.split("\\s+");
+
+                    writer.newLine();
+
+                    writer.write("CPU Core: " + cpuStat[3] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core Interrupt (%): " + cpuStat[9] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core I/O (%): " + cpuStat[7] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core System (%): " + cpuStat[6] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core User (%) " + cpuStat[4] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core Idle (%): " + cpuStat[13] + FormatUtility.NEW_LINE_SEPARATOR);
+
+                    writer.newLine();
+
+                    writer.flush();
+
                 }
-
-                channel.disconnect();
-
-
-//                channel = session.openChannel("shell");
-//
-//                outputStream = channel.getOutputStream();
-//
-//                commander = new PrintStream(outputStream, true);
-//
-//                channel.setOutputStream(System.out, true);
-//
-//                channel.connect();
-//
-//                commander.println("ls");
 
             }
 
@@ -130,15 +126,39 @@ public class SSHClient
 
         finally
         {
-            if (channel != null)
+            try
             {
-                channel.disconnect();
+                if (channel != null)
+                {
+                    channel.disconnect();
+
+                }
+
+                if (session != null)
+                {
+                    session.disconnect();
+                }
+
+                if (reader != null)
+                {
+                    reader.close();
+                }
+
+                if (writer != null)
+                {
+                    writer.close();
+                }
+
+                if (inputStream != null)
+                {
+                    inputStream.close();
+                }
 
             }
 
-            if (session != null)
+            catch (Exception exception)
             {
-                session.disconnect();
+                exception.printStackTrace();
             }
         }
     }
