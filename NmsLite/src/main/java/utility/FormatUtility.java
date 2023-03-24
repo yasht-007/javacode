@@ -1,4 +1,6 @@
-class FormatUtility
+package utility;
+
+public class FormatUtility
 {
     // Code for inserting new line
     public static final String NEW_LINE_SEPARATOR = "\n";
@@ -11,9 +13,9 @@ class FormatUtility
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    static final String POLLING_FILE_PATH = "../../PingOutputs/";
+    public static final String POLLING_FILE_PATH = "../../PingOutputs/";
 
-    static String IP_REGEX = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+    public static String IP_REGEX = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
 
 }

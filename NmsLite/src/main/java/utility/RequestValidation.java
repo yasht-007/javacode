@@ -1,10 +1,12 @@
+package utility;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class RequestValidation
+public class RequestValidation
 {
-    static boolean isIPValid(String ip)
+    public static boolean isIPValid(String ip)
     {
 
         return RegexChecker.complileAndMatchRegex(FormatUtility.IP_REGEX, ip);

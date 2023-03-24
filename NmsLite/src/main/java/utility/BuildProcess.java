@@ -1,13 +1,12 @@
+package utility;
+
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class BuildProcess
 {
-    boolean discover(String ip)
+   public static boolean discover(String ip)
     {
         BufferedReader inputReader = null;
 
@@ -94,15 +93,13 @@ public class BuildProcess
 
     }
 
-    String poll(String ip, String discoveryName)
+    public boolean poll(String ip, String discoveryName, String dateTime)
     {
         Process process = null;
 
         BufferedWriter outputWriter = null;
 
         BufferedReader outputReader = null;
-
-        String dateTime = null;
 
         try
         {
@@ -136,15 +133,13 @@ public class BuildProcess
 
                 outputWriter = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "availability.log", true));
 
-                dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(FormatUtility.DATE_TIME_FORMAT));
-
                 outputWriter.write(dateTime + " : " + outputReader.readLine());
 
                 outputWriter.newLine();
 
                 outputWriter.flush();
 
-                return dateTime;
+                return true;
 
             }
 
@@ -188,7 +183,7 @@ public class BuildProcess
             }
         }
 
-        return dateTime;
+        return false;
 
     }
 
