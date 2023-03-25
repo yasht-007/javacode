@@ -1,6 +1,6 @@
 package api;
 
-import utility.FormatUtility;
+import utility.Const;
 
 import java.io.BufferedReader;
 
@@ -47,23 +47,23 @@ public class User
         {
             reader = new BufferedReader(new InputStreamReader(System.in));
 
-            System.out.print(FormatUtility.NEW_LINE_SEPARATOR + "Please enter unique discovery name : ");
+            System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter unique discovery name : ");
 
             discoveryName = reader.readLine().trim();
 
-            System.out.print(FormatUtility.NEW_LINE_SEPARATOR + "Please enter unique IP Address that you want to ping : ");
+            System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter unique IP Address that you want to ping : ");
 
             ip = reader.readLine().trim();
 
-            System.out.print(FormatUtility.NEW_LINE_SEPARATOR + "Please enter username of your device : ");
+            System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter username of your device : ");
 
             userName = reader.readLine().trim();
 
-            System.out.print(FormatUtility.NEW_LINE_SEPARATOR + "Please enter password of your device : ");
+            System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter password of your device : ");
 
             password = reader.readLine();
 
-            System.out.print(FormatUtility.NEW_LINE_SEPARATOR + "Please enter port number of in which ssh service is running : ");
+            System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter port number of in which ssh service is running : ");
 
             port = reader.readLine();
 

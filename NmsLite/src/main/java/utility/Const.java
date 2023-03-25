@@ -1,6 +1,6 @@
 package utility;
 
-public class FormatUtility
+public class Const
 {
     // Code for inserting new line
     public static final String NEW_LINE_SEPARATOR = "\n";
@@ -16,6 +16,7 @@ public class FormatUtility
     public static final String POLLING_FILE_PATH = "../../PingOutputs/";
 
     public static String IP_REGEX = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+
 
 
 }

@@ -2,7 +2,7 @@ import api.CredentialProfile;
 import api.User;
 import nms.Discovery;
 import nms.MetricScheduler;
-import utility.FormatUtility;
+import utility.Const;
 import utility.RequestValidation;
 
 import java.io.*;
@@ -29,11 +29,11 @@ public class Bootstrap
             while (true)
             {
 
-                System.out.println(FormatUtility.NEW_LINE_SEPARATOR + "Please enter a choice to proceed : " + FormatUtility.NEW_LINE_SEPARATOR);
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Please enter a choice to proceed : " + Const.NEW_LINE_SEPARATOR);
 
-                System.out.println("1.Monitor" + FormatUtility.NEW_LINE_SEPARATOR);
+                System.out.println("1.Monitor" + Const.NEW_LINE_SEPARATOR);
 
-                System.out.println("2.Exit" + FormatUtility.NEW_LINE_SEPARATOR);
+                System.out.println("2.Exit" + Const.NEW_LINE_SEPARATOR);
 
                 System.out.print("Enter your choice here : ");
 
@@ -47,7 +47,7 @@ public class Bootstrap
 
                     if (!RequestValidation.isIPValid(user.getIp()))
                     {
-                        System.err.println(FormatUtility.NEW_LINE_SEPARATOR + "Please enter valid Ip Address" + FormatUtility.NEW_LINE_SEPARATOR);
+                        System.err.println(Const.NEW_LINE_SEPARATOR + "Please enter valid Ip Address" + Const.NEW_LINE_SEPARATOR);
 
                         continue;
                     }
@@ -58,26 +58,30 @@ public class Bootstrap
 
                         String provisioningOption;
 
-                        System.out.print(FormatUtility.NEW_LINE_SEPARATOR + "Do you want to start provisioning? (yes/no) : ");
+                        System.out.print(Const.NEW_LINE_SEPARATOR + "Do you want to start provisioning? (yes/no) : ");
 
                         provisioningOption = reader.readLine();
 
                         if (provisioningOption.toLowerCase().trim().equals("yes"))
                         {
+                            System.out.print(Const.NEW_LINE_SEPARATOR+"Please enter polling time interval in milliseconds: ");
+
+                            long interval = Long.parseLong(reader.readLine());
+
                             CredentialProfile userProfile = new CredentialProfile(user);
 
                             credentialProfile.add(userProfile);
 
-                            System.out.println(FormatUtility.NEW_LINE_SEPARATOR + FormatUtility.GREEN_COLOUR + "Your provisioning task for " + user.getIp() + " has been successfully assigned" + FormatUtility.RESET_COLOUR);
+                            System.out.println(Const.NEW_LINE_SEPARATOR + Const.GREEN_COLOUR + "Your provisioning task for " + user.getIp() + " has been successfully assigned" + Const.RESET_COLOUR);
 
-                            File file = new File(FormatUtility.POLLING_FILE_PATH + user.getDiscoveryName() + "- poll.log");
+                            File file = new File(Const.POLLING_FILE_PATH + user.getDiscoveryName() + "- poll.log");
 
                             if (!file.exists() && !file.mkdir())
                             {
                                 System.err.println("Couldn't make file directory for " + user.getDiscoveryName());
                             }
 
-                            new MetricScheduler().scheduleTask(executor, 20000L, userProfile);
+                            new MetricScheduler().scheduleTask(executor, interval, userProfile);
 
                         }
 

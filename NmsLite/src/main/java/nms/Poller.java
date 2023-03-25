@@ -3,7 +3,7 @@ package nms;
 import api.CredentialProfile;
 import plugins.SSHClient;
 import utility.BuildProcess;
-import utility.FormatUtility;
+import utility.Const;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class Poller
 
         try (BufferedWriter outputWriter = null; BufferedReader outputReader = null)
         {
-            dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(FormatUtility.DATE_TIME_FORMAT));
+            dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Const.DATE_TIME_FORMAT));
 
             if (new BuildProcess().poll(ip, disoveryName, dateTime))
             {

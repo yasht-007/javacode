@@ -9,7 +9,7 @@ public class RequestValidation
     public static boolean isIPValid(String ip)
     {
 
-        return RegexChecker.complileAndMatchRegex(FormatUtility.IP_REGEX, ip);
+        return RegexChecker.complileAndMatchRegex(Const.IP_REGEX, ip);
 
     }
 

@@ -17,7 +17,7 @@ public class BuildProcess
         try
         {
 
-            System.out.println(FormatUtility.NEW_LINE_SEPARATOR + "Please wait, we are going to ping " + ip + " ......" + FormatUtility.NEW_LINE_SEPARATOR);
+            System.out.println(Const.NEW_LINE_SEPARATOR + "Please wait, we are going to ping " + ip + " ......" + Const.NEW_LINE_SEPARATOR);
 
             List<String> command = new ArrayList<>();
 
@@ -43,7 +43,7 @@ public class BuildProcess
 
                 output = inputReader.readLine();
 
-                var splitWithLine = output.split(FormatUtility.NEW_LINE_SEPARATOR);
+                var splitWithLine = output.split(Const.NEW_LINE_SEPARATOR);
 
                 for (String s : splitWithLine)
                 {
@@ -131,7 +131,7 @@ public class BuildProcess
 
                 outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-                outputWriter = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "availability.log", true));
+                outputWriter = new BufferedWriter(new FileWriter(Const.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "availability.log", true));
 
                 outputWriter.write(dateTime + " : " + outputReader.readLine());
 

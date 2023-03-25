@@ -2,7 +2,7 @@ package plugins;
 
 import api.User;
 import com.jcraft.jsch.*;
-import utility.FormatUtility;
+import utility.Const;
 
 import java.io.*;
 
@@ -85,7 +85,7 @@ public class SSHClient
 
                 channel = session.openChannel("exec");
 
-                command = "mpstat -P ALL | awk 'NR>3'";
+                command = "mpstat -P ALL | awk 'NR>3';echo '-vmstat';vmstat | awk 'NR>2';echo '-memory';free -w | awk 'NR>1';echo '-disk';iostat | awk 'NR>6';";
 
                 ((ChannelExec) channel).setCommand(command);
 
@@ -99,198 +99,117 @@ public class SSHClient
 
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                writer = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "cpustats.txt", true));
+                int flag = 0;
 
-                writer.write("Time : " + dateTime + FormatUtility.NEW_LINE_SEPARATOR);
+                writer = new BufferedWriter(new FileWriter(Const.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "cpustats.txt", true));
 
-                for (String output; (output = reader.readLine()) != null; )
-                {
-                    String[] cpuStat = output.split("\\s+");
+                writer.write("Time : " + dateTime + Const.NEW_LINE_SEPARATOR);
 
-                    writer.newLine();
-
-                    writer.write("CPU Core: " + cpuStat[3] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core Interrupt (%): " + cpuStat[9] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core I/O (%): " + cpuStat[7] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core System (%): " + cpuStat[6] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core User (%) " + cpuStat[4] + FormatUtility.NEW_LINE_SEPARATOR + "CPU Core Idle (%): " + cpuStat[13] + FormatUtility.NEW_LINE_SEPARATOR);
-
-                    writer.newLine();
-
-                    writer.flush();
-                }
-
-                channel.disconnect();
-
-                channel = session.openChannel("exec");
-
-                command = "vmstat | awk 'NR>2'";
-
-                ((ChannelExec) channel).setCommand(command);
-
-                channel.connect();
-
-                channel.setInputStream(null);
-
-                ((ChannelExec) channel).setErrStream(System.err);
-
-                inputStream = channel.getInputStream();
-
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                writer = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "vmstat.txt", true));
-
-                writer.write("Time : " + dateTime + FormatUtility.NEW_LINE_SEPARATOR);
 
                 for (String output; (output = reader.readLine()) != null; )
                 {
-                    String[] vmStat = output.split("\\s+");
+                    String delimeter = output.split("\\s+")[0];
 
-                    writer.newLine();
+                    String[] stat = output.split("\\s+");
 
-                    writer.write("system.running.processes=" + vmStat[1]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.blocked.processes=" + vmStat[2]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.swap=" + vmStat[3]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.free=" + vmStat[4]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.buffer=" + vmStat[5]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.cache=" + vmStat[6]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.swapin=" + vmStat[7]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.swapout=" + vmStat[8]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.io.blockin=" + vmStat[9]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.io.blockout=" + vmStat[10]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.interrupt=" + vmStat[11]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.contextswitch=" + vmStat[12]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.cpu.userlevel=" + vmStat[13]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.cpu.systemlevel=" + vmStat[14]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.cpu.idle=" + vmStat[15]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.cpu.wait=" + vmStat[16]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.cpu.steal=" + vmStat[17] + FormatUtility.NEW_LINE_SEPARATOR);
-
-                    writer.flush();
-
-                }
-
-                channel.disconnect();
-
-                channel = session.openChannel("exec");
-
-                command = "free -w | awk 'NR>1'";
-
-                ((ChannelExec) channel).setCommand(command);
-
-                channel.connect();
-
-                channel.setInputStream(null);
-
-                ((ChannelExec) channel).setErrStream(System.err);
-
-                inputStream = channel.getInputStream();
-
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                writer = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "memory.txt", true));
-
-                writer.write("Time : " + dateTime + FormatUtility.NEW_LINE_SEPARATOR);
-
-                for (String output; (output = reader.readLine()) != null; )
-                {
-                    String[] memoryStat = output.split("\\s+");
-
-                    writer.newLine();
-
-                    if (memoryStat[0].equals("Swap:"))
+                    switch (delimeter)
                     {
+                        case "-vmstat" ->
+                        {
+                            flag = 1;
 
-                        writer.write("Swap:");
+                            writer = new BufferedWriter(new FileWriter(Const.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "vmstat.txt", true));
 
-                        writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.swap.total=" + memoryStat[1]);
+                            writer.write("Time : " + dateTime + Const.NEW_LINE_SEPARATOR);
 
-                        writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.swap.used=" + memoryStat[2]);
+                            continue;
+                        }
 
-                        writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.swap.free=" + memoryStat[3]);
+                        case "-memory" ->
+                        {
+                            flag = 2;
 
-                        writer.flush();
+                            writer = new BufferedWriter(new FileWriter(Const.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "memory.txt", true));
 
-                        continue;
+                            writer.write("Time : " + dateTime + Const.NEW_LINE_SEPARATOR);
+
+                            continue;
+                        }
+
+                        case "-disk" ->
+                        {
+                            flag = 3;
+
+                            writer = new BufferedWriter(new FileWriter(Const.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "iostat.txt", true));
+
+                            writer.write("Time : " + dateTime + Const.NEW_LINE_SEPARATOR);
+
+                            continue;
+                        }
+
                     }
 
-                    writer.write("system.memory.total=" + memoryStat[1]);
+                    switch (flag)
+                    {
+                        case 0 ->
+                        {
+                            writer.newLine();
 
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.used=" + memoryStat[2]);
+                            writer.write("CPU Core: " + stat[3] + Const.NEW_LINE_SEPARATOR + "CPU Core Interrupt (%): " + stat[9] + Const.NEW_LINE_SEPARATOR + "CPU Core I/O (%): " + stat[7] + Const.NEW_LINE_SEPARATOR + "CPU Core System (%): " + stat[6] + Const.NEW_LINE_SEPARATOR + "CPU Core User (%) " + stat[4] + Const.NEW_LINE_SEPARATOR + "CPU Core Idle (%): " + stat[13] + Const.NEW_LINE_SEPARATOR);
 
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.free=" + memoryStat[3]);
+                            writer.newLine();
 
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.shared=" + memoryStat[4]);
+                            writer.flush();
+                        }
 
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.buffer=" + memoryStat[5]);
+                        case 1 ->
+                        {
+                            writer.newLine();
 
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.cache=" + memoryStat[6]);
+                            writer.write("system.running.processes=" + stat[1] + Const.NEW_LINE_SEPARATOR + "system.blocked.processes=" + stat[2] + Const.NEW_LINE_SEPARATOR + "system.memory.swap=" + stat[3] + Const.NEW_LINE_SEPARATOR + "system.memory.free=" + stat[4] + Const.NEW_LINE_SEPARATOR + "system.memory.buffer=" + stat[5] + Const.NEW_LINE_SEPARATOR + "system.memory.cache=" + stat[6] + Const.NEW_LINE_SEPARATOR + "system.memory.swapin=" + stat[7] + Const.NEW_LINE_SEPARATOR + "system.memory.swapout=" + stat[8] + Const.NEW_LINE_SEPARATOR + "system.io.blockin=" + stat[9] + Const.NEW_LINE_SEPARATOR + "system.io.blockout=" + stat[10] + Const.NEW_LINE_SEPARATOR + "system.interrupt=" + stat[11] + Const.NEW_LINE_SEPARATOR + "system.contextswitch=" + stat[12] + Const.NEW_LINE_SEPARATOR + "system.cpu.userlevel=" + stat[13] + Const.NEW_LINE_SEPARATOR + "system.cpu.systemlevel=" + stat[14] + Const.NEW_LINE_SEPARATOR + "system.cpu.idle=" + stat[15] + Const.NEW_LINE_SEPARATOR + "system.cpu.wait=" + stat[16] + Const.NEW_LINE_SEPARATOR + "system.cpu.steal=" + stat[17] + Const.NEW_LINE_SEPARATOR);
 
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "system.memory.available=" + memoryStat[7]);
+                            writer.newLine();
 
-                    writer.flush();
+                            writer.flush();
+                        }
 
-                }
+                        case 2 ->
+                        {
+                            writer.newLine();
 
-                channel.disconnect();
+                            if (stat[0].equals("Swap:"))
+                            {
+                                writer.write("Swap: " + Const.NEW_LINE_SEPARATOR + "system.swap.total=" + stat[1] + Const.NEW_LINE_SEPARATOR + "system.swap.used=" + stat[2] + Const.NEW_LINE_SEPARATOR + "system.swap.free=" + stat[3] + Const.NEW_LINE_SEPARATOR);
 
-                channel = session.openChannel("exec");
+                                writer.newLine();
 
-                command = "iostat | awk 'NR>6'";
+                                writer.flush();
 
-                ((ChannelExec) channel).setCommand(command);
+                                continue;
+                            }
 
-                channel.connect();
+                            writer.write("Memory: " + Const.NEW_LINE_SEPARATOR + "system.memory.total=" + stat[1] + Const.NEW_LINE_SEPARATOR + "system.memory.used=" + stat[2] + Const.NEW_LINE_SEPARATOR + "system.memory.free=" + stat[3] + Const.NEW_LINE_SEPARATOR + "system.memory.shared=" + stat[4] + Const.NEW_LINE_SEPARATOR + "system.memory.buffer=" + stat[5] + Const.NEW_LINE_SEPARATOR + "system.memory.cache=" + stat[6] + Const.NEW_LINE_SEPARATOR + "system.memory.available=" + stat[7] + Const.NEW_LINE_SEPARATOR);
 
-                channel.setInputStream(null);
+                            writer.newLine();
 
-                ((ChannelExec) channel).setErrStream(System.err);
+                            writer.flush();
+                        }
 
-                inputStream = channel.getInputStream();
+                        case 3 ->
+                        {
+                            writer.newLine();
 
-                reader = new BufferedReader(new InputStreamReader(inputStream));
+                            writer.write("Device=" + stat[0] + Const.NEW_LINE_SEPARATOR + "tps=" + stat[1] + Const.NEW_LINE_SEPARATOR + "kB_read/s=" + stat[2] + Const.NEW_LINE_SEPARATOR + "kB_wrtn/s=" + stat[3] + Const.NEW_LINE_SEPARATOR + "kB_dscd/s=" + stat[4] + Const.NEW_LINE_SEPARATOR + "kB_read=" + stat[5] + Const.NEW_LINE_SEPARATOR + "kB_wrtn=" + stat[6] + Const.NEW_LINE_SEPARATOR + "kB_dscd=" + stat[7] + Const.NEW_LINE_SEPARATOR);
 
-                writer = new BufferedWriter(new FileWriter(FormatUtility.POLLING_FILE_PATH + discoveryName + "- poll.log/" + "iostat.txt", true));
+                            writer.newLine();
 
-                writer.write("Time : " + dateTime + FormatUtility.NEW_LINE_SEPARATOR);
+                            writer.flush();
 
-                for (String output; (output = reader.readLine()) != null; )
-                {
-                    String[] ioStat = output.split("\\s+");
+                        }
 
-                    writer.newLine();
+                        default -> System.err.println("Error in writing file in switch case");
+                    }
 
-                    writer.write("Device=" + ioStat[0]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "tps=" + ioStat[1]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "kB_read/s=" + ioStat[2]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "kB_wrtn/s=" + ioStat[3]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "kB_dscd/s=" + ioStat[4]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "kB_read=" + ioStat[5]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "kB_wrtn=" + ioStat[6]);
-
-                    writer.write(FormatUtility.NEW_LINE_SEPARATOR + "kB_dscd=" + ioStat[7] + "\n");
-
-                    writer.newLine();
-
-                    writer.flush();
                 }
 
                 channel.disconnect();
@@ -305,14 +224,13 @@ public class SSHClient
         }
 
         finally
-
         {
             try
             {
+
                 if (channel != null)
                 {
                     channel.disconnect();
-
                 }
 
                 if (session != null)
@@ -341,7 +259,9 @@ public class SSHClient
             {
                 exception.printStackTrace();
             }
+
         }
+
     }
 
 }
