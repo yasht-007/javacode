@@ -1,4 +1,4 @@
-package publishersubscriber;
+package experiment;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -18,9 +18,9 @@ public class SubscriberClient
 
             subscriber = context.createSocket(SocketType.SUB);
 
-            if (subscriber.connect("tcp://localhost:9999"))
+            if (subscriber.bind("tcp://localhost:9999"))
             {
-                System.out.println("Subscriber connected to port 9999");
+                System.out.println("Subscriber binded to port 9999");
             }
 
             else
@@ -30,21 +30,33 @@ public class SubscriberClient
                 System.exit(0);
             }
 
-            subscriber.subscribe("btc");
 
-            subscriber.subscribe("sol");
+            Random random = new Random(System.currentTimeMillis());
 
             while (!Thread.currentThread().isInterrupted())
             {
-                String message = subscriber.recvStr(0);
 
-                StringTokenizer tokenizer = new StringTokenizer(message, " ");
+                long bitcoin, ethereum, solana;
 
-                String currency = tokenizer.nextToken();
+                bitcoin = 28000 + random.nextLong(1000);
 
-                long price = Long.parseLong(tokenizer.nextToken());
+                ethereum = 1000 + random.nextLong(200);
 
-                System.out.println(currency + " " + price);
+                solana = 23 + random.nextLong(3);
+
+                String btcUpdate = "btc " + bitcoin;
+
+                String ethUpdate = "eth " + ethereum;
+
+                String solUpdate = "sol " + solana;
+
+                subscriber.send(btcUpdate, 0);
+
+                subscriber.send(ethUpdate, 0);
+
+                subscriber.send(solUpdate, 0);
+
+
             }
 
         }

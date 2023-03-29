@@ -1,7 +1,7 @@
 package ChatApplication;
 public class Const
 {
-    public static final int PORT_NO = 1597;
+    public static final int PORT_NO = 5555;
     public static final String LOCALHOST = "localhost";
     public static final String HOST = "10.20.40.158";
     public static final String CLIENT = "Client";

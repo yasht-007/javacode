@@ -1,4 +1,4 @@
-package publishersubscriber;
+package experiment;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -7,36 +7,37 @@ import org.zeromq.ZMQ;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-public class SubscriberClient
+public class PublisherServer
 {
     public static void main(String[] args)
     {
-        ZMQ.Socket subscriber = null;
+        ZMQ.Socket publisher = null;
 
         try (ZContext context = new ZContext())
         {
+            publisher = context.createSocket(SocketType.PUB);
 
-            subscriber = context.createSocket(SocketType.SUB);
-
-            if (subscriber.connect("tcp://localhost:9999"))
+            if (publisher.connect("tcp://*:9999"))
             {
-                System.out.println("Subscriber connected to port 9999");
+                System.out.println("Publisher connected to port 9999");
             }
 
             else
             {
-                System.out.println("Subscriber connection failed");
+                System.out.println("Publisher connection failed");
 
                 System.exit(0);
             }
 
-            subscriber.subscribe("btc");
+            publisher.subscribe("btc");
 
-            subscriber.subscribe("sol");
+            publisher.subscribe("sol");
+
 
             while (!Thread.currentThread().isInterrupted())
             {
-                String message = subscriber.recvStr(0);
+
+                String message = publisher.recvStr(0);
 
                 StringTokenizer tokenizer = new StringTokenizer(message, " ");
 
@@ -45,6 +46,8 @@ public class SubscriberClient
                 long price = Long.parseLong(tokenizer.nextToken());
 
                 System.out.println(currency + " " + price);
+
+//                Thread.sleep(10000);
             }
 
         }
@@ -55,9 +58,9 @@ public class SubscriberClient
 
         finally
         {
-            if (subscriber != null)
+            if (publisher != null)
             {
-                subscriber.close();
+                publisher.close();
             }
         }
     }

@@ -54,9 +54,11 @@ public class Server
             {
 
                 if (serverSocket != null)
+
                     serverSocket.close();
 
                 if (socket != null)
+
                     socket.close();
 
             }

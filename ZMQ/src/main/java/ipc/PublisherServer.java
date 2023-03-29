@@ -1,4 +1,4 @@
-package pushpull;
+package ipc;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -6,24 +6,24 @@ import org.zeromq.ZMQ;
 
 import java.util.Random;
 
-public class Server
+public class PublisherServer
 {
     public static void main(String[] args)
     {
-        ZMQ.Socket socket = null;
+        ZMQ.Socket publisher = null;
 
         try (ZContext context = new ZContext())
         {
-            socket = context.createSocket(SocketType.PUSH);
+            publisher = context.createSocket(SocketType.PUB);
 
-            if (socket.bind("tcp://*:5555"))
+            if (publisher.bind("ipc://yash"))
             {
-                System.out.println("server connected at port 9999");
+                System.out.println("Publisher binded to port 9999");
             }
 
             else
             {
-                System.out.println("server not connected");
+                System.out.println("Publisher connection failed");
 
                 System.exit(0);
             }
@@ -32,7 +32,6 @@ public class Server
 
             while (!Thread.currentThread().isInterrupted())
             {
-
                 long bitcoin, ethereum, solana;
 
                 bitcoin = 28000 + random.nextLong(1000);
@@ -47,14 +46,16 @@ public class Server
 
                 String solUpdate = "sol " + solana;
 
-                String update = btcUpdate + " " + ethUpdate + " " + solUpdate;
+                publisher.send(btcUpdate, 0);
 
-                socket.send(update, 0);
+                publisher.send(ethUpdate, 0);
 
-//                Thread.sleep(10000);
+                publisher.send(solUpdate, 0);
+
+                Thread.sleep(10000);
             }
-        }
 
+        }
         catch (Exception exception)
         {
             exception.printStackTrace();
@@ -62,9 +63,9 @@ public class Server
 
         finally
         {
-            if (socket != null)
+            if (publisher != null)
             {
-                socket.close();
+                publisher.close();
             }
         }
     }

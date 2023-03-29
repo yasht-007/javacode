@@ -1,10 +1,9 @@
-package publishersubscriber;
+package ipc;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-import java.util.Random;
 import java.util.StringTokenizer;
 
 public class SubscriberClient
@@ -18,7 +17,7 @@ public class SubscriberClient
 
             subscriber = context.createSocket(SocketType.SUB);
 
-            if (subscriber.connect("tcp://localhost:9999"))
+            if (subscriber.connect("ipc://yash"))
             {
                 System.out.println("Subscriber connected to port 9999");
             }
