@@ -41,7 +41,7 @@ public class ReadMessage extends Thread
                 System.out.println("Socket is closed");
             }
 
-            while (!Const.END_CONNECTION)
+            while (!Const.END_CONNECTION.get())
             {
 
                 String message;
@@ -53,11 +53,13 @@ public class ReadMessage extends Thread
                     {
                         System.out.println(user + " terminated the chat");
 
-                        Const.END_CONNECTION = true;
+                        Const.END_CONNECTION.set(true);
 
-                        socket.close();
+                        break;
 
-                        System.exit(0);
+//                        socket.close();
+
+//                        System.exit(0);
 
                     }
 

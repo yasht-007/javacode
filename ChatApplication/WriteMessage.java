@@ -45,26 +45,25 @@ public class WriteMessage extends Thread
 
             reader = new BufferedReader(new InputStreamReader(System.in));
 
-            while (!Const.END_CONNECTION)
+            while (!Const.END_CONNECTION.get())
             {
                 String input = reader.readLine();
 
                 if (input.trim().equalsIgnoreCase("bye"))
                 {
-                    Const.END_CONNECTION = true;
-
+                    Const.END_CONNECTION.set(true);
                 }
 
                 writer.println(input);
 
                 writer.flush();
 
-                if (Const.END_CONNECTION)
-                {
-                    socket.close();
-
-                    System.exit(0);
-                }
+//                if (Const.END_CONNECTION)
+//                {
+//                    socket.close();
+//
+//                    System.exit(0);
+//                }
 
             }
 
