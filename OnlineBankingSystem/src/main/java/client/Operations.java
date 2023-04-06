@@ -1,6 +1,7 @@
 package client;
 
 import org.zeromq.ZMQ;
+import utility.Const;
 
 import java.io.BufferedReader;
 
@@ -11,48 +12,48 @@ public class Operations
     private static final ZMQ.Socket socket = Bootstrap.getSocket();
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void deposit(double amount, String customerId)
+    public static void deposit(float amount, String customerId)
     {
-        socket.send("deposit");
+        socket.send("deposit amount", 0);
 
-        if (socket.recvStr().equalsIgnoreCase("ok"))
+        if (socket.recvStr(0).equalsIgnoreCase("ok"))
         {
-            socket.send(customerId + ":" + amount);
+            socket.send(customerId + ":" + amount, 0);
 
-            if (socket.recvStr().equalsIgnoreCase("success"))
+            if (socket.recvStr(0).equalsIgnoreCase("deposit success"))
             {
-                System.out.println("Deposit of " + amount + " successful");
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Deposit of " + amount + " successful");
             }
         }
 
         else
         {
-            System.err.println("Deposit of " + amount + " successful");
+            System.err.println("Server deposit error");
         }
     }
 
     public static void withdraw(double amount, String customerId)
     {
-        socket.send("withdraw");
+        socket.send("withdraw amount", 0);
 
-        if (socket.recvStr().equalsIgnoreCase("ok"))
+        if (socket.recvStr(0).equalsIgnoreCase("ok"))
         {
             socket.send(customerId + ":" + amount);
 
-            if (socket.recvStr().equalsIgnoreCase("success"))
+            if (socket.recvStr(0).equalsIgnoreCase("success"))
             {
-                System.out.println("Withdrawal of " + amount + " successful");
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Withdrawal of " + amount + " successful");
             }
 
             else
             {
-                System.err.println("Invalid withdraw amount");
+                System.err.println(Const.NEW_LINE_SEPARATOR + "Invalid withdraw amount");
             }
         }
 
         else
         {
-            System.err.println("server withdraw error");
+            System.err.println(Const.NEW_LINE_SEPARATOR + "server withdraw error");
         }
     }
 
@@ -60,9 +61,19 @@ public class Operations
     {
         socket.send("check balance");
 
-        socket.send(customerId);
+        if (socket.recvStr(0).equalsIgnoreCase("ok"))
+        {
 
-        System.out.println("Current Balance : " + socket.recvStr());
+            socket.send(customerId);
+
+            System.out.println(Const.NEW_LINE_SEPARATOR +"Current Balance : " + socket.recvStr(0));
+
+        }
+
+        else
+        {
+            System.err.println(Const.NEW_LINE_SEPARATOR +"server balance check error");
+        }
 
     }
 

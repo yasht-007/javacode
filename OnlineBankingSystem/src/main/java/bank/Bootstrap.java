@@ -9,128 +9,83 @@ import java.util.HashMap;
 
 public class Bootstrap
 {
-    private static ZContext context = new ZContext();
-
-    private static ZMQ.Socket socket = context.createSocket(SocketType.PAIR);
-
-    public static ZMQ.Socket getSocket()
-    {
-        return socket;
-    }
-
     private static HashMap<String, AccountHolder> accounts = new HashMap<>();
-    public static int LAST_ASSIGNED_CUSTOMER_ID = 1000;
-    public static int LAST_ASSIGNED_ACCOUNT_NO = 4000000;
-
-    public static boolean isAccountHolder(String customerId)
-    {
-        return accounts.containsKey(customerId);
-    }
-
-    public static boolean verifyPassword(String customerId, String password)
-    {
-        if (accounts.get(customerId).getPassword().equalsIgnoreCase(password))
-        {
-            return true;
-        }
-
-        else
-        {
-            return false;
-        }
-    }
 
     public static void main(String[] args)
     {
 
-        try
+        ZMQ.Socket socket = null;
+
+        try (ZContext context = new ZContext())
         {
+            socket = context.createSocket(SocketType.PAIR);
 
             if (socket.bind("tcp://*:9999"))
             {
-                System.out.println("Bind successful");
-            }
+                System.out.println("Bank Server successful binded");
 
+            }
             else
             {
-                System.out.println("Bind unsuccessful");
+                System.err.println("Bind unsuccessful");
 
                 System.exit(0);
             }
 
-            while (true)
+            while (!Thread.currentThread().isInterrupted())
             {
-                String operation = socket.recvStr();
+                String operation = socket.recvStr(0).toLowerCase().trim();
 
-                if (operation.equalsIgnoreCase("login"))
+                switch (operation)
                 {
-                    socket.send("ok");
-
-                    String[] service = socket.recvStr().split(":");
-
-                    if (isAccountHolder(service[0]))
+                    case "login" ->
                     {
-                        boolean status = verifyPassword(service[0], service[1]);
+                        socket.send("ok", 0);
 
-                        if (status)
-                        {
-                            socket.send("valid account holder");
-                        }
-
-                        else
-                        {
-                            socket.send("invalid password");
-                        }
+                        new LoginHandler(socket, accounts).handleLogin();
                     }
 
-                    else
+                    case "open account" -> new OpenAccountHandler(socket, accounts).handleOpenAccount();
+
+                    case "deposit amount" ->
                     {
-                        socket.send("account not found");
+                        socket.send("ok", 0);
+
+                        String[] data = socket.recvStr(0).split(":");
+
+                        AccountHolder accountDetails = accounts.get(data[0]);
+
+                        new DepositHandler(socket, accountDetails, Float.parseFloat(data[1])).handleDeposit();
                     }
 
+                    case "withdraw amount" ->
+                    {
+                        socket.send("ok", 0);
+
+                        String[] data = socket.recvStr().split(":");
+
+                        AccountHolder accountDetails = accounts.get(data[0]);
+
+                        new WithdrawHandler(socket, accountDetails, Float.parseFloat(data[1])).handleWithdraw();
+
+                    }
+
+                    case "check balance" ->
+                    {
+                        socket.send("ok", 0);
+
+                        String customerID = socket.recvStr(0);
+
+                        AccountHolder accountdetails = accounts.get(customerID);
+
+                        new CheckBalanceHandler(socket, accountdetails).handleBalanceCheck();
+                    }
+
+                    default ->
+                    {
+
+                    }
                 }
-
-                if (operation.equalsIgnoreCase("open account"))
-                {
-                    String[] accountDetails = socket.recvStr().split("\n");
-
-                    String customerId = String.valueOf(LAST_ASSIGNED_CUSTOMER_ID++);
-
-                    String accountNo = String.valueOf(LAST_ASSIGNED_ACCOUNT_NO++);
-
-                    AccountHolder accountHolder = new AccountHolder(customerId, accountNo, accountDetails[0], accountDetails[1], accountDetails[2], accountDetails[3], accountDetails[4], accountDetails[5]);
-
-                    accounts.put(customerId, accountHolder);
-
-                    socket.send("success " + customerId + " " + accountNo);
-
-                }
-
-                if (operation.equalsIgnoreCase("deposit"))
-                {
-                    socket.send("ok");
-
-                    String[] data = socket.recvStr().split(":");
-
-                    socket.send(Operations.deposit(accounts.get(data[0]), Float.parseFloat(data[1])));
-                }
-
-                if (operation.equalsIgnoreCase("withdraw"))
-                {
-                    socket.send("ok");
-
-                    String[] data = socket.recvStr().split(":");
-
-                    socket.send(Operations.withdraw(accounts.get(data[0]), Float.parseFloat(data[1])));
-                }
-
-                if (operation.equalsIgnoreCase("check balance")){
-
-                    String data =socket.recvStr();
-
-                    socket.send(Operations.checkBalance(accounts.get(data)));
-                }
-
             }
         }
 
