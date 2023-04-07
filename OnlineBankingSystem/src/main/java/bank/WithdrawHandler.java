@@ -5,7 +5,7 @@ import org.zeromq.ZMQ;
 
 public class WithdrawHandler
 {
-    private ZMQ.Socket socket;
+    private final ZMQ.Socket socket;
     private static AccountHolder accountdetails;
     private static float amount;
 

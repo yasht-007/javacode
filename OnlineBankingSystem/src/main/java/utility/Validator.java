@@ -23,4 +23,14 @@ public class Validator
         return field == null || field.equalsIgnoreCase("") || field.equalsIgnoreCase(" ");
     }
 
+    public static boolean validateAccountType(String type)
+    {
+        return type.equalsIgnoreCase("savings") || type.equalsIgnoreCase("current");
+    }
+
+    public static boolean validateAmount(float amount)
+    {
+        return amount > 0;
+    }
+
 }

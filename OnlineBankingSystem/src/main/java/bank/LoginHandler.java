@@ -1,14 +1,13 @@
 package bank;
 
 import api.AccountHolder;
-import client.Bootstrap;
 import org.zeromq.ZMQ;
 
 import java.util.HashMap;
 
 public class LoginHandler
 {
-    private ZMQ.Socket socket;
+    private final ZMQ.Socket socket;
 
     private static HashMap<String, AccountHolder> accounts;
 
@@ -53,14 +52,7 @@ public class LoginHandler
 
     public static boolean verifyPassword(String customerId, String password)
     {
-        if (accounts.get(customerId).getPassword().equalsIgnoreCase(password))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return accounts.get(customerId).getPassword().equalsIgnoreCase(password);
     }
 
 }

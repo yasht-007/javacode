@@ -1,16 +1,12 @@
 package client;
 
 import org.zeromq.ZMQ;
+
 import utility.Const;
-
-import java.io.BufferedReader;
-
-import java.io.InputStreamReader;
 
 public class Operations
 {
     private static final ZMQ.Socket socket = Bootstrap.getSocket();
-    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void deposit(float amount, String customerId)
     {
@@ -66,13 +62,13 @@ public class Operations
 
             socket.send(customerId);
 
-            System.out.println(Const.NEW_LINE_SEPARATOR +"Current Balance : " + socket.recvStr(0));
+            System.out.println(Const.NEW_LINE_SEPARATOR + "Current Balance : " + socket.recvStr(0));
 
         }
 
         else
         {
-            System.err.println(Const.NEW_LINE_SEPARATOR +"server balance check error");
+            System.err.println(Const.NEW_LINE_SEPARATOR + "server balance check error");
         }
 
     }

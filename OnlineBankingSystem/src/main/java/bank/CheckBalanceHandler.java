@@ -5,8 +5,8 @@ import org.zeromq.ZMQ;
 
 public class CheckBalanceHandler
 {
-    private ZMQ.Socket socket;
-    private AccountHolder accountdetails;
+    private final ZMQ.Socket socket;
+    private final AccountHolder accountdetails;
 
     public CheckBalanceHandler(ZMQ.Socket socket, AccountHolder accountdetails)
     {
@@ -18,6 +18,6 @@ public class CheckBalanceHandler
 
     public void handleBalanceCheck()
     {
-        socket.send(String.valueOf(accountdetails.getBalance()),0);
+        socket.send(String.valueOf(accountdetails.getBalance()), 0);
     }
 }

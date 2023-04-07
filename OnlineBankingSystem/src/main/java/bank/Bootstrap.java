@@ -9,20 +9,17 @@ import java.util.HashMap;
 
 public class Bootstrap
 {
-    private static HashMap<String, AccountHolder> accounts = new HashMap<>();
+    private static final HashMap<String, AccountHolder> accounts = new HashMap<>();
 
     public static void main(String[] args)
     {
 
-        ZMQ.Socket socket = null;
-
-        try (ZContext context = new ZContext())
+        try (ZContext context = new ZContext(); ZMQ.Socket socket = context.createSocket(SocketType.PAIR))
         {
-            socket = context.createSocket(SocketType.PAIR);
 
             if (socket.bind("tcp://*:9999"))
             {
-                System.out.println("Bank Server successful binded");
+                System.out.println("Bank Server successfully bound");
 
             }
             else
@@ -88,18 +85,9 @@ public class Bootstrap
                 }
             }
         }
-
         catch (Exception exception)
         {
             exception.printStackTrace();
-        }
-
-        finally
-        {
-            if (socket != null)
-            {
-                socket.close();
-            }
         }
     }
 }

@@ -6,12 +6,12 @@ import utility.Const;
 
 import java.util.HashMap;
 
-public class OpenAccountHandler implements Runnable
+public class OpenAccountHandler
 {
     public static int LAST_ASSIGNED_CUSTOMER_ID = 1000;
     public static int LAST_ASSIGNED_ACCOUNT_NO = 4000000;
-    private ZMQ.Socket socket;
-    private HashMap<String, AccountHolder> accounts;
+    private final ZMQ.Socket socket;
+    private final HashMap<String, AccountHolder> accounts;
 
     public OpenAccountHandler(ZMQ.Socket socket, HashMap<String, AccountHolder> accounts)
     {
@@ -20,15 +20,9 @@ public class OpenAccountHandler implements Runnable
         this.accounts = accounts;
     }
 
-    @Override
-    public void run()
-    {
-        handleOpenAccount();
-    }
-
     public void handleOpenAccount()
     {
-        String[] accountDetails = socket.recvStr(0).split("\n");
+        String[] accountDetails = socket.recvStr(0).split(Const.NEW_LINE_SEPARATOR);
 
         String customerId = String.valueOf(LAST_ASSIGNED_CUSTOMER_ID++);
 

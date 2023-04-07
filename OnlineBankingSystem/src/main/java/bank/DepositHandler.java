@@ -3,11 +3,9 @@ package bank;
 import api.AccountHolder;
 import org.zeromq.ZMQ;
 
-import java.util.HashMap;
-
 public class DepositHandler
 {
-    private ZMQ.Socket socket;
+    private final ZMQ.Socket socket;
     private static AccountHolder accountdetails;
     private static float amount;
 

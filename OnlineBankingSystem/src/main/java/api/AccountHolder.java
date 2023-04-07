@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 
 public class AccountHolder
 {
-    BufferedReader reader = null;
-    private String customerId;
-    private String password;
-    private String dateOfBirth;
-    private String accountNo;
+    private final String customerId;
+    private final String password;
+    private final String accountNo;
     private String name;
+    private String dateOfBirth;
     private String contactNo;
     private String email;
     private String accountType;
@@ -105,6 +104,9 @@ public class AccountHolder
     {
         this.balance = balance;
     }
-
+    public void setDateOfBirth(String dateOfBirth)
+    {
+        this.dateOfBirth = dateOfBirth;
+    }
 
 }
