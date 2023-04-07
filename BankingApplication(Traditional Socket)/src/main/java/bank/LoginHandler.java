@@ -10,12 +10,10 @@ public class LoginHandler
 {
     private final DataInputStream reader;
     private final DataOutputStream writer;
-    private static HashMap<String, AccountHolder> accounts;
+    private static HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
 
     LoginHandler()
     {
-        accounts = new AccountDb().getAccounts();
-
         reader = ClientHandler.getReader();
 
         writer = ClientHandler.getWriter();

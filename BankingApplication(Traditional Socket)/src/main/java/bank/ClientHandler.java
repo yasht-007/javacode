@@ -13,7 +13,7 @@ public class ClientHandler implements Runnable
     private static DataInputStream reader = null;
     private static DataOutputStream writer = null;
 
-    private static final HashMap<String,AccountHolder> accounts = new AccountDb().getAccounts();
+    private static final HashMap<String,AccountHolder> accounts = AccountDb.getAccounts();
     private static Socket socket;
 
     public ClientHandler(Socket socket)

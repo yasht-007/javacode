@@ -6,9 +6,9 @@ import java.util.HashMap;
 
 public class AccountDb
 {
-    private final HashMap<String, AccountHolder> accounts = new HashMap<>();
+    private static HashMap<String, AccountHolder> accounts = new HashMap<>();
 
-    public HashMap<String, AccountHolder> getAccounts()
+    public static HashMap<String, AccountHolder> getAccounts()
     {
         return accounts;
     }

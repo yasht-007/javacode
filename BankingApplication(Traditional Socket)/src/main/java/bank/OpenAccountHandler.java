@@ -13,12 +13,11 @@ public class OpenAccountHandler
     public static int LAST_ASSIGNED_ACCOUNT_NO = 4000000;
     private final DataInputStream reader;
     private final DataOutputStream writer;
-    private static HashMap<String, AccountHolder> accounts;
+    private static HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
 
 
     public OpenAccountHandler()
     {
-        accounts = new AccountDb().getAccounts();
 
         reader = ClientHandler.getReader();
 
