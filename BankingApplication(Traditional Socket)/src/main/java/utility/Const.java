@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class Const
 {
     public static final String NEW_LINE_SEPARATOR = "\n";
@@ -9,5 +11,6 @@ public class Const
     public static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     public static final String PASS_REGEX = "[0-9a-zA-Z@#$%]{8,}";
     public static final String CUST_ID_REGEX = "^\\d{4}$";
+    public static final int NO_OF_THREADS = 10;
 
 }

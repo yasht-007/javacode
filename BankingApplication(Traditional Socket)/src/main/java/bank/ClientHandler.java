@@ -5,6 +5,7 @@ import api.AccountHolder;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 
 
@@ -12,20 +13,29 @@ public class ClientHandler implements Runnable
 {
     private static final HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
     private final Socket socket;
+    private final DataInputStream reader;
+    private final DataOutputStream writer;
 
-    public ClientHandler(Socket socket)
+    public ClientHandler(Socket socket, DataInputStream reader, DataOutputStream writer)
     {
         this.socket = socket;
+
+        this.reader = reader;
+
+        this.writer = writer;
+    }
+
+
+    @Override
+    public void run()
+    {
+        handleClient();
     }
 
     public void handleClient()
     {
         try
         {
-            DataInputStream reader = new DataInputStream(socket.getInputStream());
-
-            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
-
             String ip = socket.getInetAddress().getHostAddress();
 
             while (socket.isConnected())
@@ -35,9 +45,9 @@ public class ClientHandler implements Runnable
 
                 switch (operation)
                 {
-                    case "login" -> new LoginHandler(reader, writer,ip).handleLogin();
+                    case "login" -> new LoginHandler(reader, writer, ip).handleLogin();
 
-                    case "open account" -> new OpenAccountHandler(reader, writer,ip).handleOpenAccount();
+                    case "open account" -> new OpenAccountHandler(reader, writer, ip).handleOpenAccount();
 
                     case "deposit amount" ->
                     {
@@ -45,7 +55,7 @@ public class ClientHandler implements Runnable
 
                         AccountHolder accountDetails = accounts.get(data[0]);
 
-                        new DepositHandler(writer, accountDetails, Float.parseFloat(data[1]),ip).handleDeposit();
+                        new DepositHandler(writer, accountDetails, Float.parseFloat(data[1]), ip).handleDeposit();
                     }
 
                     case "withdraw amount" ->
@@ -55,7 +65,7 @@ public class ClientHandler implements Runnable
 
                         AccountHolder accountDetails = accounts.get(data[0]);
 
-                        new WithdrawHandler(writer, accountDetails, Float.parseFloat(data[1]),ip).handleWithdraw();
+                        new WithdrawHandler(writer, accountDetails, Float.parseFloat(data[1]), ip).handleWithdraw();
 
                     }
 
@@ -69,26 +79,25 @@ public class ClientHandler implements Runnable
 
                         AccountHolder accountdetails = accounts.get(customerID);
 
-                        new CheckBalanceHandler(writer, accountdetails,ip).handleBalanceCheck();
+                        new CheckBalanceHandler(writer, accountdetails, ip).handleBalanceCheck();
                     }
 
                     default -> System.out.println("Error case client handler");
                 }
             }
         }
-
         catch (Exception exception)
         {
-            exception.printStackTrace();
+            if (exception instanceof EOFException)
+            {
+                System.err.println("client " + socket.getRemoteSocketAddress().toString() + " disconnected");
+            }
+            else
+            {
+                exception.printStackTrace();
+            }
         }
 
-    }
-
-
-    @Override
-    public void run()
-    {
-        handleClient();
     }
 
 }

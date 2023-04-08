@@ -6,6 +6,7 @@ import utility.Validator;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.net.SocketException;
 
 import static client.Bootstrap.displayServices;
 
@@ -184,7 +185,16 @@ public class LoginHandler
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
+            if (exception instanceof SocketException)
+            {
+                System.err.println("Bank server connection closed");
+
+                Thread.currentThread().interrupt();
+            }
+            else
+            {
+                exception.printStackTrace();
+            }
         }
     }
 

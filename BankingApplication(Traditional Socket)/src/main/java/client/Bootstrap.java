@@ -12,17 +12,31 @@ public class Bootstrap
 
     public static void main(String[] args)
     {
+        Socket socket = new Socket();
 
-        try (Socket socket = new Socket())
+        DataInputStream socketinputreader = null;
+
+        DataOutputStream writer = null;
+
+        BufferedReader reader = null;
+
+        try
         {
 
             socket.connect(new InetSocketAddress(InetAddress.getByName("localhost"), 9999));
 
-            DataInputStream socketinputreader = new DataInputStream(socket.getInputStream());
+            socketinputreader = new DataInputStream(socket.getInputStream());
 
-            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            writer = new DataOutputStream(socket.getOutputStream());
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            reader = new BufferedReader(new InputStreamReader(System.in));
+
+            if (socketinputreader.readUTF().equalsIgnoreCase("-1"))
+            {
+                System.err.println("Bank server is down. Please try again after sometime");
+
+                Thread.currentThread().interrupt();
+            }
 
             while (!Thread.currentThread().isInterrupted())
             {
@@ -52,9 +66,46 @@ public class Bootstrap
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
+            if (exception instanceof EOFException)
+            {
+                System.err.println("sever connection closed");
+            }
+
+            else
+            {
+                exception.printStackTrace();
+            }
+        }
+
+        finally
+        {
+            try
+            {
+                socket.close();
+
+                if (socketinputreader != null)
+                {
+                    socketinputreader.close();
+                }
+
+                if (writer != null)
+                {
+                    writer.close();
+                }
+
+                if (reader != null)
+                {
+                    reader.close();
+                }
+            }
+
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
         }
     }
+
     public static void displayDashboard()
     {
         try
@@ -75,6 +126,7 @@ public class Bootstrap
         }
 
     }
+
     public static void displayServices()
     {
         try
