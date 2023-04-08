@@ -13,15 +13,18 @@ public class OpenAccountHandler
     public static int LAST_ASSIGNED_ACCOUNT_NO = 4000000;
     private final DataInputStream reader;
     private final DataOutputStream writer;
-    private static HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
+
+    private final String ip;
+    private static final HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
 
 
-    public OpenAccountHandler()
+    public OpenAccountHandler(DataInputStream reader, DataOutputStream writer, String ip)
     {
+        this.reader = reader;
 
-        reader = ClientHandler.getReader();
+        this.writer = writer;
 
-        writer = ClientHandler.getWriter();
+        this.ip = ip;
     }
 
     public void handleOpenAccount()
@@ -38,6 +41,8 @@ public class OpenAccountHandler
             AccountHolder accountHolder = new AccountHolder(customerId, accountNo, accountDetails[0], accountDetails[1], accountDetails[2], accountDetails[3], accountDetails[4], accountDetails[5]);
 
             accounts.put(customerId, accountHolder);
+
+            System.out.println(ip + " tried to open account");
 
             writer.writeUTF("success:" + customerId + ":" + accountNo);
 

@@ -10,16 +10,19 @@ public class DepositHandler
 {
     private final DataOutputStream writer;
     private static AccountHolder accountdetails;
-    private static float amount;
+    private final float amount;
+    private final String ip;
 
-    public DepositHandler(AccountHolder accountdetails, float amount)
+    public DepositHandler(DataOutputStream writer, AccountHolder accountdetails, float amount, String ip)
     {
 
         DepositHandler.accountdetails = accountdetails;
 
-        DepositHandler.amount = amount;
+        this.amount = amount;
 
-        writer = ClientHandler.getWriter();
+        this.writer = writer;
+
+        this.ip = ip;
 
     }
 
@@ -33,6 +36,9 @@ public class DepositHandler
             writer.writeUTF("deposit success");
 
             writer.flush();
+
+            System.out.println(ip+" tried for depositing "+amount);
+
         }
         catch (Exception exception)
         {

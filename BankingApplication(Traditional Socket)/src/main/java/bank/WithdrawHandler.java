@@ -9,16 +9,19 @@ import java.io.DataOutputStream;
 public class WithdrawHandler
 {
     private static AccountHolder accountdetails;
-    private static float amount;
+    private final float amount;
+    private final String ip;
     private final DataOutputStream writer;
 
-    public WithdrawHandler(AccountHolder accountdetails, float amount)
+    public WithdrawHandler(DataOutputStream writer, AccountHolder accountdetails, float amount,String ip)
     {
         WithdrawHandler.accountdetails = accountdetails;
 
-        WithdrawHandler.amount = amount;
+        this.amount = amount;
 
-        writer = ClientHandler.getWriter();
+        this.ip = ip;
+
+        this.writer = writer;
     }
 
     public void handleWithdraw()
@@ -31,6 +34,11 @@ public class WithdrawHandler
             if (balanceAfterUpdate < 0)
             {
                 writer.writeUTF("balance can't be less than zero");
+
+                writer.flush();
+
+                System.out.println(ip+" tried for withdrawing "+amount+" and failed because amount entered is zero or less than zero");
+
             }
 
             else
@@ -38,6 +46,11 @@ public class WithdrawHandler
                 accountdetails.setBalance(balanceAfterUpdate);
 
                 writer.writeUTF("success");
+
+                writer.flush();
+
+                System.out.println(ip+" tried for withdrawing "+amount+" and succeeded");
+
             }
 
         }

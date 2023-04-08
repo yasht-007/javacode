@@ -10,13 +10,17 @@ public class LoginHandler
 {
     private final DataInputStream reader;
     private final DataOutputStream writer;
-    private static HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
 
-    LoginHandler()
+    private final String ip;
+    private static final HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
+
+    LoginHandler(DataInputStream reader, DataOutputStream writer, String ip)
     {
-        reader = ClientHandler.getReader();
+        this.reader = reader;
 
-        writer = ClientHandler.getWriter();
+        this.writer = writer;
+
+        this.ip = ip;
     }
 
     public void handleLogin()
@@ -31,6 +35,8 @@ public class LoginHandler
                 writer.writeUTF("account not exist");
 
                 writer.flush();
+
+                System.out.println(ip + " tried for login and account not exist");
             }
 
             else
@@ -41,6 +47,8 @@ public class LoginHandler
                     writer.writeUTF("valid user");
 
                     writer.flush();
+
+                    System.out.println(ip + " tried for login and it's a valid user");
                 }
 
                 else
@@ -48,10 +56,12 @@ public class LoginHandler
                     writer.writeUTF("invalid user");
 
                     writer.flush();
+
+                    System.out.println(ip + " tried for login and it's an invalid user");
+
                 }
 
             }
-
 
         }
 
@@ -61,12 +71,12 @@ public class LoginHandler
         }
     }
 
-    public static boolean isAccountExist(String customerId)
+    public boolean isAccountExist(String customerId)
     {
         return accounts.containsKey(customerId);
     }
 
-    public static boolean verifyPassword(String customerId, String password)
+    public boolean verifyPassword(String customerId, String password)
     {
         return accounts.get(customerId).getPassword().equalsIgnoreCase(password);
     }

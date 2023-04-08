@@ -1,18 +1,13 @@
 package client;
 
-import bank.ClientHandler;
 import utility.Const;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.net.Socket;
 
 public class Operations
 {
-    private static final DataInputStream reader = Bootstrap.getReader();
-    private static final DataOutputStream writer = Bootstrap.getWriter();
-
-    public static void deposit(float amount, String customerId)
+    public void deposit(DataInputStream reader, DataOutputStream writer, float amount, String customerId)
     {
         try
         {
@@ -21,22 +16,15 @@ public class Operations
 
             writer.flush();
 
-            if (reader.readUTF().equalsIgnoreCase("ok"))
+            writer.writeUTF(customerId + ":" + amount);
+
+            writer.flush();
+
+            if (reader.readUTF().equalsIgnoreCase("deposit success"))
             {
-                writer.writeUTF(customerId + ":" + amount);
-
-                writer.flush();
-
-                if (reader.readUTF().equalsIgnoreCase("deposit success"))
-                {
-                    System.out.println(Const.NEW_LINE_SEPARATOR + "Deposit of " + amount + " successful");
-                }
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Deposit of " + amount + " successful");
             }
 
-            else
-            {
-                System.err.println("Server deposit error");
-            }
         }
         catch (Exception exception)
         {
@@ -44,7 +32,7 @@ public class Operations
         }
     }
 
-    public static void withdraw(double amount, String customerId)
+    public void withdraw(DataInputStream reader, DataOutputStream writer, double amount, String customerId)
     {
         try
         {
@@ -52,27 +40,20 @@ public class Operations
 
             writer.flush();
 
-            if (reader.readUTF().equalsIgnoreCase("ok"))
+            writer.writeUTF(customerId + ":" + amount);
+
+            writer.flush();
+
+            if (reader.readUTF().equalsIgnoreCase("success"))
             {
-                writer.writeUTF(customerId + ":" + amount);
-
-                writer.flush();
-
-                if (reader.readUTF().equalsIgnoreCase("success"))
-                {
-                    System.out.println(Const.NEW_LINE_SEPARATOR + "Withdrawal of " + amount + " successful");
-                }
-
-                else
-                {
-                    System.err.println(Const.NEW_LINE_SEPARATOR + "Invalid withdraw amount");
-                }
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Withdrawal of " + amount + " successful");
             }
 
             else
             {
-                System.err.println(Const.NEW_LINE_SEPARATOR + "server withdraw error");
+                System.err.println(Const.NEW_LINE_SEPARATOR + "Invalid withdraw amount");
             }
+
         }
 
         catch (Exception exception)
@@ -81,7 +62,7 @@ public class Operations
         }
     }
 
-    public static void checkBalance(String customerId)
+    public void checkBalance(DataInputStream reader, DataOutputStream writer,String customerId)
     {
         try
         {

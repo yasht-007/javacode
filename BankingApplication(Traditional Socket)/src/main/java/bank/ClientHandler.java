@@ -10,83 +10,67 @@ import java.util.HashMap;
 
 public class ClientHandler implements Runnable
 {
-    private static DataInputStream reader = null;
-    private static DataOutputStream writer = null;
-
-    private static final HashMap<String,AccountHolder> accounts = AccountDb.getAccounts();
-    private static Socket socket;
+    private static final HashMap<String, AccountHolder> accounts = AccountDb.getAccounts();
+    private final Socket socket;
 
     public ClientHandler(Socket socket)
     {
-        ClientHandler.socket = socket;
+        this.socket = socket;
     }
 
     public void handleClient()
     {
         try
         {
-            reader = new DataInputStream(socket.getInputStream());
+            DataInputStream reader = new DataInputStream(socket.getInputStream());
 
-            writer = new DataOutputStream(socket.getOutputStream());
+            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
 
-            while (true)
+            String ip = socket.getInetAddress().getHostAddress();
+
+            while (socket.isConnected())
             {
 
                 String operation = reader.readUTF().toLowerCase().trim();
 
                 switch (operation)
                 {
-                    case "login" ->
+                    case "login" -> new LoginHandler(reader, writer,ip).handleLogin();
+
+                    case "open account" -> new OpenAccountHandler(reader, writer,ip).handleOpenAccount();
+
+                    case "deposit amount" ->
+                    {
+                        String[] data = reader.readUTF().split(":");
+
+                        AccountHolder accountDetails = accounts.get(data[0]);
+
+                        new DepositHandler(writer, accountDetails, Float.parseFloat(data[1]),ip).handleDeposit();
+                    }
+
+                    case "withdraw amount" ->
+                    {
+
+                        String[] data = reader.readUTF().split(":");
+
+                        AccountHolder accountDetails = accounts.get(data[0]);
+
+                        new WithdrawHandler(writer, accountDetails, Float.parseFloat(data[1]),ip).handleWithdraw();
+
+                    }
+
+                    case "check balance" ->
                     {
                         writer.writeUTF("ok");
 
                         writer.flush();
 
-                        new LoginHandler().handleLogin();
+                        String customerID = reader.readUTF();
 
+                        AccountHolder accountdetails = accounts.get(customerID);
+
+                        new CheckBalanceHandler(writer, accountdetails,ip).handleBalanceCheck();
                     }
-
-                    case "open account" -> new OpenAccountHandler().handleOpenAccount();
-
-                case "deposit amount" ->
-                {
-                    writer.writeUTF("ok");
-
-                    writer.flush();
-
-                    String[] data = reader.readUTF().split(":");
-
-                    AccountHolder accountDetails = accounts.get(data[0]);
-
-                    new DepositHandler(accountDetails, Float.parseFloat(data[1])).handleDeposit();
-                }
-
-                case "withdraw amount" ->
-                {
-                    writer.writeUTF("ok");
-
-                    writer.flush();
-
-                    String[] data = reader.readUTF().split(":");
-
-                    AccountHolder accountDetails = accounts.get(data[0]);
-
-                    new WithdrawHandler(accountDetails, Float.parseFloat(data[1])).handleWithdraw();
-
-                }
-
-                case "check balance" ->
-                {
-                    writer.writeUTF("ok");
-
-                    writer.flush();
-
-                    String customerID = reader.readUTF();
-
-                    AccountHolder accountdetails = accounts.get(customerID);
-
-                    new CheckBalanceHandler(accountdetails).handleBalanceCheck();
-                }
 
                     default -> System.out.println("Error case client handler");
                 }
@@ -105,16 +89,6 @@ public class ClientHandler implements Runnable
     public void run()
     {
         handleClient();
-    }
-
-    public static DataInputStream getReader()
-    {
-        return reader;
-    }
-
-    public static DataOutputStream getWriter()
-    {
-        return writer;
     }
 
 }
