@@ -33,7 +33,7 @@ public class Bootstrap
 
             if (socketinputreader.readUTF().equalsIgnoreCase("-1"))
             {
-                System.err.println("Bank server is down. Please try again after sometime");
+                System.out.println(Const.RED_COLOUR + "Bank server is down. Please try again after sometime" + Const.RESET_COLOUR);
 
                 Thread.currentThread().interrupt();
             }
@@ -47,8 +47,6 @@ public class Bootstrap
 
                 String option = reader.readLine();
 
-                System.out.println(option);
-
                 switch (option)
                 {
                     case "1" -> new LoginHandler(socketinputreader, writer, reader).handleLogin();
@@ -57,7 +55,7 @@ public class Bootstrap
 
                     case "3" -> Thread.currentThread().interrupt();
 
-                    default -> System.err.println("Please enter valid choice");
+                    default -> System.out.println(Const.RED_COLOUR + "Please enter valid choice" + Const.RESET_COLOUR);
 
                 }
 
@@ -68,7 +66,7 @@ public class Bootstrap
         {
             if (exception instanceof EOFException)
             {
-                System.err.println("sever connection closed");
+                System.out.println(Const.RED_COLOUR + "sever connection closed" + Const.RESET_COLOUR);
             }
 
             else

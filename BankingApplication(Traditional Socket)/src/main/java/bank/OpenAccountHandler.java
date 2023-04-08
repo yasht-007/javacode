@@ -5,6 +5,7 @@ import utility.Const;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.util.HashMap;
 
 public class OpenAccountHandler
@@ -52,7 +53,15 @@ public class OpenAccountHandler
 
         catch (Exception exception)
         {
-            exception.printStackTrace();
+            if (exception instanceof EOFException)
+            {
+                System.out.println(Const.RED_COLOUR + "client " + ip + " disconnected" + Const.RESET_COLOUR);
+            }
+
+            else
+            {
+                exception.printStackTrace();
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 package client;
 
 import utility.Const;
-import utility.Validator;
+import utility.UserInput;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -12,6 +12,7 @@ public class OpenAccountHandler
     private final DataInputStream socketinputreader;
     private final DataOutputStream writer;
     private final BufferedReader reader;
+
     public OpenAccountHandler(DataInputStream socketinputreader, DataOutputStream writer, BufferedReader reader)
     {
         this.socketinputreader = socketinputreader;
@@ -36,7 +37,7 @@ public class OpenAccountHandler
 
             if (status[0].equalsIgnoreCase("success"))
             {
-                System.out.println(Const.NEW_LINE_SEPARATOR + "Account successfully created. ");
+                System.out.println(Const.NEW_LINE_SEPARATOR + Const.GREEN_COLOUR + "Account successfully created. " + Const.RESET_COLOUR);
 
                 System.out.println(Const.NEW_LINE_SEPARATOR + "Account details : " + Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Customer Id : " + status[1] + Const.NEW_LINE_SEPARATOR + "Account Number : " + status[2]);
 
@@ -45,7 +46,7 @@ public class OpenAccountHandler
             }
             else
             {
-                System.err.println("Error creating your account" + Const.NEW_LINE_SEPARATOR);
+                System.out.println(Const.RED_COLOUR + "Error creating your account" + Const.RESET_COLOUR + Const.NEW_LINE_SEPARATOR);
             }
 
         }
@@ -63,124 +64,17 @@ public class OpenAccountHandler
         {
             while (true)
             {
-                String name, dob, contactNo, emailAddress, password, accountType;
+                accountDetails.append(UserInput.getInput(Const.NAME_REGEX, Const.NAME_INPUT_MESSAGE, Const.NAME_ERROR_MESSAGE, reader)).append(Const.NEW_LINE_SEPARATOR);
 
-                while (true)
-                {
+                accountDetails.append(UserInput.getInput(Const.DOB_REGEX, Const.DOB_INPUT_MESSAGE, Const.DOB_ERROR_MESSAGE, reader)).append(Const.NEW_LINE_SEPARATOR);
 
-                    System.out.print(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Enter your full name : ");
+                accountDetails.append(UserInput.getInput(Const.CONTACT_REGEX, Const.CONTACT_INPUT_MESSAGE, Const.CONTACT_ERROR_MESSAGE, reader)).append(Const.NEW_LINE_SEPARATOR);
 
-                    name = reader.readLine().trim();
+                accountDetails.append(UserInput.getInput(Const.EMAIL_REGEX, Const.EMAIL_INPUT_MESSAGE, Const.EMAIL_ERROR_MESSAGE, reader)).append(Const.NEW_LINE_SEPARATOR);
 
-                    if (!Validator.isEmpty(name) && Validator.validatePattern(Const.NAME_REGEX, name))
-                    {
-                        accountDetails.append(name).append(Const.NEW_LINE_SEPARATOR);
+                accountDetails.append(UserInput.getAccountType(Const.ACCOUNT_TYPE_INPUT_MESSAGE, Const.ACCOUNT_TYPE_ERROR_MESSAGE, reader)).append(Const.NEW_LINE_SEPARATOR);
 
-                        break;
-                    }
-                    else
-                    {
-                        System.err.println("Please enter valid name");
-                    }
-                }
-
-                while (true)
-                {
-
-                    System.out.print(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Enter your date of birth (MM/DD/YYYY) : ");
-
-                    dob = reader.readLine().trim();
-
-                    if (!dob.isEmpty() && Validator.validatePattern(Const.DOB_REGEX, dob))
-                    {
-                        accountDetails.append(dob).append(Const.NEW_LINE_SEPARATOR);
-
-                        break;
-                    }
-                    else
-                    {
-                        System.err.println("Please enter valid date of birth");
-                    }
-
-                }
-
-                while (true)
-                {
-
-                    System.out.print(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Enter your contact number : ");
-
-                    contactNo = reader.readLine().trim();
-
-                    if (!contactNo.isEmpty() && Validator.validatePattern(Const.CONTACT_REGEX, contactNo))
-                    {
-                        accountDetails.append(contactNo).append(Const.NEW_LINE_SEPARATOR);
-
-                        break;
-                    }
-                    else
-                    {
-                        System.err.println("Please enter valid contact number");
-                    }
-                }
-
-                while (true)
-                {
-
-                    System.out.print(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Enter your email address : ");
-
-                    emailAddress = reader.readLine().trim();
-
-                    if (!emailAddress.isEmpty() && Validator.validatePattern(Const.EMAIL_REGEX, emailAddress))
-                    {
-                        accountDetails.append(emailAddress).append(Const.NEW_LINE_SEPARATOR);
-
-                        break;
-                    }
-                    else
-                    {
-                        System.err.println("Please enter valid email address");
-                    }
-                }
-
-                while (true)
-                {
-
-                    System.out.print(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Enter type of account (savings/current) : ");
-
-                    accountType = reader.readLine().trim();
-
-                    if (!Validator.isEmpty(accountType) && Validator.validateAccountType(accountType))
-                    {
-                        accountDetails.append(accountType).append(Const.NEW_LINE_SEPARATOR);
-
-                        break;
-                    }
-                    else
-                    {
-                        System.err.println("Please enter only savings or current");
-                    }
-
-                }
-
-                while (true)
-                {
-
-                    System.out.print(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Enter password for banking (must be greater than 8 characters): ");
-
-                    password = reader.readLine().trim();
-
-                    if (!password.isEmpty() && Validator.validatePattern(Const.PASS_REGEX, password))
-                    {
-                        accountDetails.append(password).append(Const.NEW_LINE_SEPARATOR);
-
-                        break;
-                    }
-                    else
-                    {
-                        System.err.println(Const.NEW_LINE_SEPARATOR + "Please enter valid password");
-                    }
-
-                }
+                accountDetails.append(UserInput.getInput(Const.PASS_REGEX, Const.PASSWORD_INPUT_MESSAGE, Const.PASS_ERROR_MESSAGE, reader)).append(Const.NEW_LINE_SEPARATOR);
 
                 return accountDetails.toString();
             }

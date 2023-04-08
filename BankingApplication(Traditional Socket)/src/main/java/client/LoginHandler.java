@@ -1,6 +1,7 @@
 package client;
 
 import utility.Const;
+import utility.UserInput;
 import utility.Validator;
 
 import java.io.BufferedReader;
@@ -29,45 +30,9 @@ public class LoginHandler
     {
         try
         {
-            String customerId;
+            String customerId = UserInput.getInput(Const.CUST_ID_REGEX, Const.CUSTOMER_ID_INPUT_MESSAGE, Const.CUSTOMER_ID_ERROR_MESSAGE, reader);
 
-            while (true)
-            {
-                System.out.println(utility.Const.NEW_LINE_SEPARATOR + "Login to Online Banking : " + utility.Const.NEW_LINE_SEPARATOR);
-
-                System.out.print("Enter Customer Id (Must be of 4 digits) : ");
-
-                customerId = reader.readLine().trim();
-
-                if (Validator.isEmpty(customerId) || !Validator.validatePattern(Const.CUST_ID_REGEX, customerId))
-                {
-                    System.err.println("Please enter valid customer id");
-
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-
-            String password;
-
-            while (true)
-            {
-                System.out.print(Const.NEW_LINE_SEPARATOR + "Enter Password : ");
-
-                password = reader.readLine().trim();
-
-                if (Validator.isEmpty(password) || !Validator.validatePattern(Const.PASS_REGEX, password))
-                {
-                    System.err.println("Please enter valid password" + Const.NEW_LINE_SEPARATOR);
-                }
-                else
-                {
-                    break;
-                }
-            }
+            String password = UserInput.getInput(Const.PASS_REGEX, Const.PASSWORD_INPUT_MESSAGE, Const.PASS_ERROR_MESSAGE, reader);
 
             writer.writeUTF("login");
 
@@ -115,7 +80,7 @@ public class LoginHandler
 
                             if (choice.equalsIgnoreCase("4"))
                             {
-                                System.out.println(Const.NEW_LINE_SEPARATOR + "Thanks for visiting our bank" + Const.NEW_LINE_SEPARATOR);
+                                System.out.println(Const.NEW_LINE_SEPARATOR + Const.GREEN_COLOUR + "Thanks for visiting our bank" + Const.RESET_COLOUR + Const.NEW_LINE_SEPARATOR);
 
                                 break;
                             }
@@ -135,7 +100,7 @@ public class LoginHandler
                                     }
                                     else
                                     {
-                                        System.err.println("Please enter valid deposit amount");
+                                        System.out.println(Const.RED_COLOUR + "Please enter valid deposit amount" + Const.RESET_COLOUR);
                                     }
                                 }
 
@@ -151,7 +116,7 @@ public class LoginHandler
                                     }
                                     else
                                     {
-                                        System.err.println("Please enter valid withdraw amount");
+                                        System.out.println(Const.RED_COLOUR + "Please enter valid withdraw amount" + Const.RESET_COLOUR);
 
                                     }
 
@@ -164,13 +129,14 @@ public class LoginHandler
                                     System.out.println();
                                 }
 
-                                default -> System.err.println(Const.NEW_LINE_SEPARATOR + "Please enter valid choice");
+                                default ->
+                                        System.out.println(Const.NEW_LINE_SEPARATOR + Const.RED_COLOUR + "Please enter valid choice" + Const.RESET_COLOUR);
 
                             }
                         }
                         catch (NumberFormatException exception)
                         {
-                            System.err.println("Please enter valid amount");
+                            System.out.println(Const.RED_COLOUR + "Please enter valid amount" + Const.RESET_COLOUR);
                         }
 
                         System.out.println(Const.NEW_LINE_SEPARATOR + "Press enter to continue (enter) : ");
@@ -179,7 +145,8 @@ public class LoginHandler
                     }
                 }
 
-                case "invalid user" -> System.err.println(Const.NEW_LINE_SEPARATOR + "Please enter correct password");
+                case "invalid user" ->
+                        System.out.println(Const.NEW_LINE_SEPARATOR + Const.RED_COLOUR + "Please enter correct password" + Const.RESET_COLOUR);
             }
 
         }
@@ -187,7 +154,7 @@ public class LoginHandler
         {
             if (exception instanceof SocketException)
             {
-                System.err.println("Bank server connection closed");
+                System.out.println(Const.RED_COLOUR + "Bank server connection closed" + Const.RESET_COLOUR);
 
                 Thread.currentThread().interrupt();
             }

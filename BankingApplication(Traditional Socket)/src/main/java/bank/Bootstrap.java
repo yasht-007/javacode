@@ -28,7 +28,7 @@ public class Bootstrap
             {
                 Socket socket = serverSocket.accept();
 
-                System.out.println("client " + socket.getRemoteSocketAddress() + " connected");
+                System.out.println(Const.GREEN_COLOUR + "client " + socket.getRemoteSocketAddress() + " connected" + Const.RESET_COLOUR);
 
                 int activeThreadCount = ((ThreadPoolExecutor) executor).getActiveCount();
 
@@ -51,7 +51,7 @@ public class Bootstrap
 
                     writer.flush();
 
-                    System.err.println("client " + socket.getRemoteSocketAddress().toString() + " disconnected due to server load");
+                    System.out.println(Const.RED_COLOUR + "client " + socket.getRemoteSocketAddress().toString() + " disconnected due to server load" + Const.RESET_COLOUR);
 
                 }
 

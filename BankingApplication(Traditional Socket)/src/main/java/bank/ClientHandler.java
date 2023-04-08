@@ -2,10 +2,10 @@ package bank;
 
 
 import api.AccountHolder;
+import utility.Const;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.HashMap;
 
 
@@ -90,7 +90,7 @@ public class ClientHandler implements Runnable
         {
             if (exception instanceof EOFException)
             {
-                System.err.println("client " + socket.getRemoteSocketAddress().toString() + " disconnected");
+                System.out.println(Const.RED_COLOUR + "client " + socket.getRemoteSocketAddress().toString() + " disconnected" + Const.RESET_COLOUR);
             }
             else
             {

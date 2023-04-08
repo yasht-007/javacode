@@ -51,7 +51,7 @@ public class Operations
 
             else
             {
-                System.err.println(Const.NEW_LINE_SEPARATOR + "Invalid withdraw amount");
+                System.out.println(Const.NEW_LINE_SEPARATOR + Const.RED_COLOUR + "Invalid withdraw amount" + Const.RESET_COLOUR);
             }
 
         }
@@ -62,7 +62,7 @@ public class Operations
         }
     }
 
-    public void checkBalance(DataInputStream reader, DataOutputStream writer,String customerId)
+    public void checkBalance(DataInputStream reader, DataOutputStream writer, String customerId)
     {
         try
         {
@@ -84,7 +84,7 @@ public class Operations
 
             else
             {
-                System.err.println(Const.NEW_LINE_SEPARATOR + "server balance check error");
+                System.out.println(Const.RED_COLOUR + Const.NEW_LINE_SEPARATOR + "server balance check error" + Const.RESET_COLOUR);
             }
         }
 
