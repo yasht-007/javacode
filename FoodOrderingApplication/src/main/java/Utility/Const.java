@@ -3,7 +3,7 @@ package Utility;
 public class Const
 {
     public static final String NEW_LINE_SEPARATOR = "\n";
-
+    public static final String DOT_SEPARATOR = ".";
     public static final String HOST = "localhost";
     public static final int PORT_NUMBER = 9999;
     public static final String GREEN_COLOUR = "\u001B[32m";

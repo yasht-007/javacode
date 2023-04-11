@@ -2,21 +2,28 @@ package Service;
 
 import Model.Menu;
 import Repository.MenuImpl;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MenuService
 {
     Repository.MenuImpl menu = MenuImpl.getInstance();
 
-    public HashMap<String, Menu> fetchMenu()
+    public String fetchMenu()
     {
-        return menu.getMenu();
+        JSONArray jsonArray = new JSONArray();
+
+        jsonArray.put(menu.getMenu().values());
+
+        return jsonArray.toString();
     }
 
     public String addToMenu(String id, String name)
     {
-        if (menu.checkNull(id))
+        if (!menu.checkNull(id))
         {
             menu.addItemToMenu(id, name);
 

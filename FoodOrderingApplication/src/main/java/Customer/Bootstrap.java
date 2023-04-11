@@ -3,14 +3,18 @@ package Customer;
 import Utility.Connection;
 import Utility.Const;
 import Utility.UserInput;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Bootstrap
 {
+    private static final AtomicBoolean loggedIn = new AtomicBoolean(false);
+    private static String customerContactNumber = null;
 
     public static void main(String[] args)
     {
@@ -20,22 +24,61 @@ public class Bootstrap
             {
                 System.out.println(Const.NEW_LINE_SEPARATOR + Const.NEW_LINE_SEPARATOR + "Welcome to Online Food Ordering System : " + Const.NEW_LINE_SEPARATOR);
 
-                displayDashboard();
-
-                var option = reader.readLine();
-
-                switch (option)
+                if (!loggedIn.get() && customerContactNumber == null)
                 {
-                    case "1" -> login(reader);
+                    displayDashboard();
 
-                    case "2" -> register(reader);
+                    var option = reader.readLine();
 
-                    case "3" -> Thread.currentThread().interrupt();
+                    switch (option)
+                    {
+                        case "1" -> login(reader);
 
-                    default -> System.out.println(Const.RED_COLOUR + "Please enter valid choice" + Const.RESET_COLOUR);
+                        case "2" -> register(reader);
+
+                        case "3" -> Thread.currentThread().interrupt();
+
+                        default ->
+                                System.out.println(Const.RED_COLOUR + "Please enter valid choice" + Const.RESET_COLOUR);
+
+                    }
 
                 }
 
+                else
+                {
+                    try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
+                    {
+                        displayMainMenu();
+
+                        var choice = reader.readLine();
+
+                        switch (choice)
+                        {
+                            case "1" ->
+                            {
+                                var menuOption = handleMenu(customerContactNumber, connection, reader);
+
+                                if (menuOption != null)
+                                {
+                                    System.out.println(menuOption);
+                                }
+                            }
+
+                            case "2" ->
+                            {
+
+                            }
+
+                            case "3" ->
+                            {
+                                loggedIn.set(false);
+
+                                customerContactNumber = null;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -125,9 +168,12 @@ public class Bootstrap
             {
                 case "login success" ->
                 {
-                    System.out.println(Const.GREEN_COLOUR + "Login Success! Now choose what you want to do ...." + Const.RESET_COLOUR);
+                    System.out.println(Const.GREEN_COLOUR + "Login Success!" + Const.RESET_COLOUR);
 
-                    //displayMainMenu
+                    loggedIn.set(true);
+
+                    customerContactNumber = contactNumber;
+
                 }
 
                 case "incorrect password" ->
@@ -156,4 +202,48 @@ public class Bootstrap
         System.out.print(Const.NEW_LINE_SEPARATOR + "Enter your choice here : ");
 
     }
+
+    public static void displayMainMenu()
+    {
+        System.out.println("Please select what you want to do....");
+
+        System.out.println("1. See menu");
+
+        System.out.println("2. View cart");
+
+        System.out.println("3. Log Out");
+
+        System.out.print(Const.NEW_LINE_SEPARATOR + "Enter your choice here : ");
+
+    }
+
+    public static String handleMenu(String contactNumber, Connection connection, BufferedReader reader) throws Exception
+    {
+        System.out.println(Const.NEW_LINE_SEPARATOR + "Select what you want to choose from menu..." + Const.NEW_LINE_SEPARATOR);
+
+        connection.write("getMenu");
+
+        String response = connection.read();
+
+        if (response == null)
+        {
+            System.out.println(Const.RED_COLOUR + "Menu response not received from server" + Const.RESET_COLOUR);
+
+            return null;
+        }
+
+        JSONArray menuResponse = new JSONArray(response);
+
+        for (int index = 0; index < menuResponse.getJSONArray(0).length(); index++)
+        {
+            JSONObject jsonObject = menuResponse.getJSONArray(0).getJSONObject(index);
+
+            System.out.println(jsonObject.getString("id") + Const.DOT_SEPARATOR + " " + jsonObject.getString("name"));
+        }
+
+        System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter your choice here : ");
+
+        return reader.readLine();
+    }
+
 }

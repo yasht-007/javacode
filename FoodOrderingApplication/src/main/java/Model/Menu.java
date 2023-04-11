@@ -1,32 +1,40 @@
 package Model;
 
-public class Menu {
+public class Menu
+{
     private String id;
     private String name;
 
-    public Menu() {
+    public Menu()
+    {
 
     }
 
-    public Menu(String id, String name) {
+    public Menu(String id, String name)
+    {
         setId(id);
 
         setName(name);
     }
 
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
+
 }

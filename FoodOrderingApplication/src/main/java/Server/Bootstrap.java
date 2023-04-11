@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -68,11 +69,25 @@ public class Bootstrap
                                 connectionOutput.flush();
 
                             }
+
+                            case "getMenu" ->
+                            {
+                                connectionOutput.writeUTF(new MenuService().fetchMenu());
+
+                                connectionOutput.flush();
+                            }
                         }
                     }
                     catch (Exception exception)
                     {
-                        exception.printStackTrace();
+                        if (exception instanceof EOFException || exception instanceof SocketException)
+                        {
+
+                        }
+                        else
+                        {
+                            exception.printStackTrace();
+                        }
                     }
                 });
             }
@@ -80,7 +95,15 @@ public class Bootstrap
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
+            if (exception instanceof EOFException || exception instanceof SocketException)
+            {
+
+            }
+
+            else
+            {
+                exception.printStackTrace();
+            }
         }
 
         finally
