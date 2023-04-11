@@ -1,7 +1,5 @@
 package api;
 
-import java.io.BufferedReader;
-
 public class AccountHolder
 {
     private final String customerId;
