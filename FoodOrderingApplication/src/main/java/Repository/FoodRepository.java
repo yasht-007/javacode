@@ -5,8 +5,9 @@ import Model.Menu;
 
 import java.util.HashMap;
 
-public interface FoodRepository {
+public interface FoodRepository
+{
     HashMap<String, Model.Food> getFoodItems(String menuId);
 
-    void addFoodItemToList(String menuId, String foodId, String name, String description, String price, Model.FoodPreference foodPreference);
+    void addFoodItemToList(String menuId, Model.Food item);
 }

@@ -12,7 +12,7 @@ public class CustomerImpl implements CustomerRepository
     {
     }
 
-    private static synchronized CustomerImpl getInstance()
+    public static synchronized CustomerImpl getInstance()
     {
 
         if (customerImpl == null)
@@ -23,17 +23,17 @@ public class CustomerImpl implements CustomerRepository
         return customerImpl;
     }
 
+
     @Override
-    public Model.Customer findByContactNumber(String contactNo)
+    public String getPasswordByContactNUmber(String contactNo)
     {
-        return customer.get(contactNo);
+        return customer.get(contactNo).getPassword();
     }
 
     @Override
-    public void createCustomer(String contactNo, String name, String address)
+    public void createCustomer(String contactNo, String name, String address, String password)
     {
-        customer.put(contactNo, new Model.Customer(contactNo, name, address));
-
+        customer.put(contactNo, new Model.Customer(contactNo, name, address, password));
     }
 
     @Override

@@ -9,7 +9,7 @@ public class MenuService
 {
     Repository.MenuImpl menu = MenuImpl.getInstance();
 
-    public HashMap<String, Menu> displayMenu()
+    public HashMap<String, Menu> fetchMenu()
     {
         return menu.getMenu();
     }

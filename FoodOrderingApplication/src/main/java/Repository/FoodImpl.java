@@ -14,7 +14,7 @@ public class FoodImpl implements FoodRepository
     {
     }
 
-    private static synchronized FoodImpl getInstance()
+    public static synchronized FoodImpl getInstance()
     {
 
         if (foodImpl == null)
@@ -32,13 +32,21 @@ public class FoodImpl implements FoodRepository
         return (HashMap<String, Food>) foodItem.get(menuId).clone();
     }
 
-    @Override
-    public void addFoodItemToList(String menuId, String foodId, String name, String description, String price, Model.FoodPreference foodPreference)
+    public void addFoodItemToList(String menuId, Model.Food item)
     {
         HashMap<String, Model.Food> food = new HashMap<>();
 
-        food.put(foodId, new Model.Food(foodId, name, description, price, foodPreference));
+        food.put(item.getId(), item);
 
         foodItem.put(menuId, food);
+    }
+
+    public boolean checkNull(String menuId)
+    {
+        return foodItem.containsKey(menuId);
+    }
+    public boolean checkNull(String menuId, String foodId)
+    {
+        return foodItem.get(menuId).containsKey(foodId);
     }
 }

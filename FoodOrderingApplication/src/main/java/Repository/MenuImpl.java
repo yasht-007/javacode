@@ -4,7 +4,7 @@ import Model.Menu;
 
 import java.util.HashMap;
 
-public class MenuImpl implements MenuRepository, NullCheck
+public class MenuImpl implements MenuRepository
 {
 
     private static MenuImpl menuImpl = null;
@@ -43,9 +43,9 @@ public class MenuImpl implements MenuRepository, NullCheck
         return menu.containsKey(menuId);
     }
 
-    @Override
     public boolean checkNull(String id)
     {
         return menu.containsKey(id);
     }
+
 }
