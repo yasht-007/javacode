@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class CartService
 {
-    private CartImpl cart = CartImpl.getInstance();
+    private final CartImpl cart = CartImpl.getInstance();
 
     public String addItemToCart(String contactNumber, int menuId, int foodId)
     {
@@ -23,16 +23,14 @@ public class CartService
         if (cart.getCart(contactNumber) == null)
         {
             cart.addToCart(contactNumber, foodItem);
-
-            return "success";
         }
 
         else
         {
             cart.appendToCart(contactNumber, foodItem);
-
-            return "success";
         }
+
+        return "success";
     }
 
     public String getCartItems(String contactNumber)
@@ -61,4 +59,12 @@ public class CartService
 
         return jsonArray.toString();
     }
+
+    public String clearCart(String contactNumber)
+    {
+        cart.clearCart(contactNumber);
+
+        return "success";
+    }
+
 }

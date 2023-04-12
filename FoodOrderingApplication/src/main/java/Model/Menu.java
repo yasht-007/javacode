@@ -5,11 +5,6 @@ public class Menu
     private int id;
     private String name;
 
-    public Menu()
-    {
-
-    }
-
     public Menu(int id, String name)
     {
         setId(id);
@@ -17,10 +12,6 @@ public class Menu
         setName(name);
     }
 
-    public int getId()
-    {
-        return id;
-    }
 
     public String getName()
     {

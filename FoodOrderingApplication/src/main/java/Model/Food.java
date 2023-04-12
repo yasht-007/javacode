@@ -5,10 +5,6 @@ public class Food {
     private String name;
     private String price;
 
-    public Food() {
-
-    }
-
     public Food(int id, String name, String price) {
         setId(id);
 

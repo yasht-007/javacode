@@ -6,14 +6,12 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FoodService
 {
-    FoodImpl food = FoodImpl.getInstance();
-
+    private final FoodImpl food = FoodImpl.getInstance();
     public String fetchFoodItems(int menuId)
     {
         JSONArray jsonArray = new JSONArray();
@@ -67,12 +65,9 @@ public class FoodService
     {
         for (Map<Integer, Model.Food> map : food.getFoodItems(menuId))
         {
-            Iterator iterator = map.entrySet().iterator();
 
-            while (iterator.hasNext())
+            for (Map.Entry<Integer, Food> entry : map.entrySet())
             {
-                Map.Entry<Integer, Food> entry = (Map.Entry<Integer, Food>) iterator.next();
-
                 if (entry.getKey() == foodId)
                 {
                     return entry.getValue();

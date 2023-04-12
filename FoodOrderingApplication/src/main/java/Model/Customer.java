@@ -7,11 +7,6 @@ public class Customer
     private String address;
     private String password;
 
-    public Customer()
-    {
-
-    }
-
     public Customer(String contactNo, String name, String address, String password)
     {
         setContactNo(contactNo);
@@ -23,10 +18,6 @@ public class Customer
         setPassword(password);
     }
 
-    public String getContactNo()
-    {
-        return contactNo;
-    }
     public void setContactNo(String contactNo)
     {
         this.contactNo = contactNo;
@@ -44,10 +35,6 @@ public class Customer
     public String getName()
     {
         return name;
-    }
-    public String getAddress()
-    {
-        return address;
     }
     public String getPassword()
     {

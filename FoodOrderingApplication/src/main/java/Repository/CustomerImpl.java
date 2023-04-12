@@ -35,13 +35,6 @@ public class CustomerImpl implements CustomerRepository
     {
         customer.put(contactNo, new Model.Customer(contactNo, name, address, password));
     }
-
-    @Override
-    public void deleteCustomer(String contactNo)
-    {
-        customer.remove(contactNo);
-    }
-
     @Override
     public boolean isExistingCustomer(String contactNo)
     {

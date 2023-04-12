@@ -21,8 +21,8 @@ public class Bootstrap
     public static void main(String[] args)
     {
 
-        try (ServerSocket serverSocket = new ServerSocket(9999);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));)
+        try (ServerSocket serverSocket = new ServerSocket(9999)
+        )
         {
             System.out.println("Server started at port 9999");
 
@@ -99,10 +99,21 @@ public class Bootstrap
                             {
                                 JSONObject data = new JSONObject(connectionInput.readUTF());
 
-                                connectionOutput.writeUTF(new CartService().getCartItems(data.getString("contactNumber")));
+                                CartService cartService = new CartService();
+
+                                connectionOutput.writeUTF(cartService.getCartItems(data.getString("contactNumber")));
 
                                 connectionOutput.flush();
 
+                            }
+
+                            case "orderFood" ->
+                            {
+                                JSONObject data = new JSONObject(connectionInput.readUTF());
+
+                                connectionOutput.writeUTF(new CartService().clearCart(data.getString("contactNumber")));
+
+                                connectionOutput.flush();
                             }
                         }
                     }
@@ -110,7 +121,7 @@ public class Bootstrap
                     {
                         if (exception instanceof EOFException || exception instanceof SocketException)
                         {
-
+                            System.out.println(Const.RED_COLOUR + socket.getRemoteSocketAddress() + " disconnected" + Const.RESET_COLOUR);
                         }
                         else
                         {
@@ -123,15 +134,7 @@ public class Bootstrap
         }
         catch (Exception exception)
         {
-            if (exception instanceof EOFException || exception instanceof SocketException)
-            {
-
-            }
-
-            else
-            {
-                exception.printStackTrace();
-            }
+            exception.printStackTrace();
         }
 
         finally

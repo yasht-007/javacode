@@ -44,6 +44,11 @@ public class CartImpl implements CartRepository
         cart.put(contactNumber, list);
     }
 
+    public void clearCart(String contactNumber)
+    {
+        cart.remove(contactNumber);
+    }
+
     @Override
     public void appendToCart(String contactNumber, Model.Food foodItem)
     {
