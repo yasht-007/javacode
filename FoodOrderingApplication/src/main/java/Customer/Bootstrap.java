@@ -57,13 +57,10 @@ public class Bootstrap
 
                     switch (choice)
                     {
-                        case "1" -> handleMenu(reader);
+                        case "1" -> handleMenu();
 
 
-                        case "2" ->
-                        {
-
-                        }
+                        case "2" -> viewCart(customerContactNumber, menuId, foodItemId);
 
                         case "3" ->
                         {
@@ -77,27 +74,33 @@ public class Bootstrap
                                 System.out.println(Const.RED_COLOUR + "Please enter valid choice" + Const.RESET_COLOUR);
                     }
 
-                    if (!choice.equals("3"))
+                    if (!choice.equals("3") && !choice.equals("2"))
                     {
-
-                        menuId = UserInput.validateInput(Const.DIGITS_REGEX, "Please enter your choice here : ", Const.FOOD_INVALID_CHOICE_ERROR_MESSAGE, reader);
-
-                        if (menuId != null)
                         {
-                            handleFoodItems(menuId, reader);
+                            menuId = UserInput.validateInput(Const.DIGITS_REGEX, "Please enter your choice here : ", Const.FOOD_INVALID_CHOICE_ERROR_MESSAGE, reader);
 
-                            System.out.println(Const.NEW_LINE_SEPARATOR + Const.GREEN_COLOUR + "To go back to main menu enter 999" + Const.RESET_COLOUR);
-
-                            foodItemId = UserInput.validateInput(Const.DIGITS_REGEX, "Please enter your choice to add your order to cart : ", Const.FOOD_INVALID_CHOICE_ERROR_MESSAGE, reader);
-
-                            if (foodItemId.equals("999"))
+                            if (menuId != null)
                             {
-                                handleMenu(reader);
-                            }
+                                AtomicBoolean backFoodChoice = new AtomicBoolean(false);
 
-                            else
-                            {
-                                System.out.println("ok");
+                                while (!backFoodChoice.get())
+                                {
+                                    handleFoodItems(menuId);
+
+                                    System.out.println(Const.NEW_LINE_SEPARATOR + Const.GREEN_COLOUR + "To go back to main menu enter 999" + Const.RESET_COLOUR);
+
+                                    foodItemId = UserInput.validateInput(Const.DIGITS_REGEX, "Please enter your choice to add your order to cart : ", Const.FOOD_INVALID_CHOICE_ERROR_MESSAGE, reader);
+
+                                    if (foodItemId.equals("999"))
+                                    {
+                                        backFoodChoice.set(true);
+                                    }
+
+                                    else
+                                    {
+                                        addToCart(customerContactNumber, menuId, foodItemId);
+                                    }
+                                }
                             }
                         }
                     }
@@ -240,7 +243,7 @@ public class Bootstrap
 
     }
 
-    public static void handleMenu(BufferedReader reader) throws Exception
+    public static void handleMenu() throws Exception
     {
         try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
         {
@@ -269,7 +272,7 @@ public class Bootstrap
         }
     }
 
-    public static void handleFoodItems(String menuId, BufferedReader reader) throws Exception
+    public static void handleFoodItems(String menuId) throws Exception
     {
         try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
         {
@@ -288,7 +291,7 @@ public class Bootstrap
 
             JSONArray foodMenuResponse = new JSONArray(response);
 
-            System.out.println(Const.NEW_LINE_SEPARATOR + "Item No     Name     Price " + Const.NEW_LINE_SEPARATOR);
+            System.out.println(Const.NEW_LINE_SEPARATOR + "Item No\t\tName\t\tPrice " + Const.NEW_LINE_SEPARATOR);
 
 
             for (int index = 0; index < foodMenuResponse.length(); index++)
@@ -301,6 +304,93 @@ public class Bootstrap
 
         }
 
+    }
+
+    public static void addToCart(String contactNumber, String menuId, String foodId) throws Exception
+    {
+        try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
+        {
+            connection.write("addFoodItemToCart");
+
+            JSONObject request = new JSONObject();
+
+            request.put("contactNumber", contactNumber);
+
+            request.put("menuId", Integer.parseInt(menuId));
+
+            request.put("foodId", Integer.parseInt(foodId));
+
+            connection.write(request.toString());
+
+            String response = connection.read();
+
+            if (response == null)
+            {
+                System.out.println(Const.RED_COLOUR + "Add Cart response not received from server" + Const.RESET_COLOUR);
+
+                return;
+            }
+
+
+            switch (response)
+            {
+                case "success" ->
+                        System.out.println(Const.GREEN_COLOUR + "Food item successfully added to cart. You can view your cart on main menu!" + Const.RESET_COLOUR);
+
+                case "food item fetch failed" ->
+                        System.out.println(Const.RED_COLOUR + "No such food choice exists!" + Const.RESET_COLOUR);
+
+                default ->
+                        System.out.println(Const.RED_COLOUR + "Server response error for add to cart" + Const.RESET_COLOUR);
+            }
+
+        }
+    }
+
+    public static void viewCart(String contactNumber, String menuId, String foodId) throws Exception
+    {
+        try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
+        {
+            connection.write("getCart");
+
+            JSONObject request = new JSONObject();
+
+            request.put("contactNumber", contactNumber);
+
+            connection.write(request.toString());
+
+            String response = connection.read();
+
+            if (response == null)
+            {
+                System.out.println(Const.RED_COLOUR + "Get Cart response not received from server" + Const.RESET_COLOUR);
+
+                return;
+            }
+
+            if (response.length() == 21)
+            {
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Your cart is empty. Please select some food from menu...");
+            }
+
+            else
+            {
+                JSONArray jsonResponse = new JSONArray(response);
+
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Your Cart : ");
+
+                System.out.println(Const.NEW_LINE_SEPARATOR + "Item No\t\tName\t\tPrice " + Const.NEW_LINE_SEPARATOR);
+
+                int itemCount = 0;
+
+                for (int index = 0; index < jsonResponse.length(); index++)
+                {
+                    JSONObject jsonObject = jsonResponse.getJSONObject(index);
+
+                    System.out.println(++itemCount + "\t" + jsonObject.getString("name") + "\t\t" + jsonObject.getString("price"));
+                }
+            }
+        }
     }
 
 }

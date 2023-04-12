@@ -31,7 +31,7 @@ public class FoodImpl implements FoodRepository
     @Override
     public ArrayList<HashMap<Integer, Food>> getFoodItems(int menuId)
     {
-        return foodItem.get(menuId) == null ? null : foodItem.get(menuId);
+        return foodItem.get(menuId) == null ? null : (ArrayList<HashMap<Integer, Food>>) foodItem.get(menuId).clone();
     }
 
     @Override
@@ -56,12 +56,6 @@ public class FoodImpl implements FoodRepository
         list.add(food);
 
         foodItem.put(menuId, list);
-    }
-
-
-    public boolean checkNull(int menuId)
-    {
-        return foodItem.containsKey(menuId);
     }
 
 }

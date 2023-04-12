@@ -6,6 +6,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -60,5 +61,26 @@ public class FoodService
 
             return "success";
         }
+    }
+
+    public Model.Food getFoodItem(int menuId, int foodId)
+    {
+        for (Map<Integer, Model.Food> map : food.getFoodItems(menuId))
+        {
+            Iterator iterator = map.entrySet().iterator();
+
+            while (iterator.hasNext())
+            {
+                Map.Entry<Integer, Food> entry = (Map.Entry<Integer, Food>) iterator.next();
+
+                if (entry.getKey() == foodId)
+                {
+                    return entry.getValue();
+                }
+            }
+
+        }
+
+        return null;
     }
 }

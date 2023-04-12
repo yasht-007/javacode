@@ -1,7 +1,5 @@
 package Repository;
 
-import Model.Menu;
-
 import java.util.HashMap;
 
 public class MenuImpl implements MenuRepository
@@ -37,7 +35,7 @@ public class MenuImpl implements MenuRepository
         menu.put(id, new Model.Menu(id, name));
     }
 
-    public boolean checkNull(int id)
+    public boolean isEmpty(int id)
     {
         return menu.containsKey(id);
     }

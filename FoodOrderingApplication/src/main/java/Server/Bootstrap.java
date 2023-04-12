@@ -1,5 +1,6 @@
 package Server;
 
+import Service.CartService;
 import Service.CustomerService;
 import Service.FoodService;
 import Service.MenuService;
@@ -82,6 +83,26 @@ public class Bootstrap
                                 JSONObject data = new JSONObject(connectionInput.readUTF());
 
                                 connectionOutput.writeUTF(new FoodService().fetchFoodItems(Integer.parseInt(data.getString("menuId"))));
+                            }
+
+                            case "addFoodItemToCart" ->
+                            {
+                                JSONObject data = new JSONObject(connectionInput.readUTF());
+
+                                connectionOutput.writeUTF(new CartService().addItemToCart(data.getString("contactNumber"), data.getInt("menuId"), data.getInt("foodId")));
+
+                                connectionOutput.flush();
+
+                            }
+
+                            case "getCart" ->
+                            {
+                                JSONObject data = new JSONObject(connectionInput.readUTF());
+
+                                connectionOutput.writeUTF(new CartService().getCartItems(data.getString("contactNumber")));
+
+                                connectionOutput.flush();
+
                             }
                         }
                     }

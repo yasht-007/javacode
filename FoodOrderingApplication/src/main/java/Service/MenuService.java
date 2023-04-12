@@ -18,7 +18,7 @@ public class MenuService
 
     public String addToMenu(int id, String name)
     {
-        if (!menu.checkNull(id))
+        if (!menu.isEmpty(id))
         {
             menu.addItemToMenu(id, name);
 
