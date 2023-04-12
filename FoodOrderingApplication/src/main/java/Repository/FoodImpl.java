@@ -2,13 +2,15 @@ package Repository;
 
 import Model.Food;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class FoodImpl implements FoodRepository
 {
 
     private static FoodImpl foodImpl = null;
-    private static final HashMap<String, HashMap<String, Model.Food>> foodItem = new HashMap<>();
+    private static final HashMap<Integer, ArrayList<HashMap<Integer, Food>>> foodItem = new HashMap<>();
 
     private FoodImpl()
     {
@@ -27,26 +29,39 @@ public class FoodImpl implements FoodRepository
 
 
     @Override
-    public HashMap<String, Model.Food> getFoodItems(String menuId)
+    public ArrayList<HashMap<Integer, Food>> getFoodItems(int menuId)
     {
-        return (HashMap<String, Food>) foodItem.get(menuId).clone();
+        return foodItem.get(menuId) == null ? null : foodItem.get(menuId);
     }
 
-    public void addFoodItemToList(String menuId, Model.Food item)
+    @Override
+    public void addFoodItemToList(int menuId, Food item)
     {
-        HashMap<String, Model.Food> food = new HashMap<>();
+        HashMap<Integer, Model.Food> food = new HashMap<>();
 
         food.put(item.getId(), item);
 
-        foodItem.put(menuId, food);
+        foodItem.get(menuId).add(food);
     }
 
-    public boolean checkNull(String menuId)
+    @Override
+    public void addFoodItem(int menuId, Food item)
+    {
+        HashMap<Integer, Model.Food> food = new HashMap<>();
+
+        food.put(item.getId(), item);
+
+        ArrayList<HashMap<Integer, Model.Food>> list = new ArrayList<>();
+
+        list.add(food);
+
+        foodItem.put(menuId, list);
+    }
+
+
+    public boolean checkNull(int menuId)
     {
         return foodItem.containsKey(menuId);
     }
-    public boolean checkNull(String menuId, String foodId)
-    {
-        return foodItem.get(menuId).containsKey(foodId);
-    }
+
 }

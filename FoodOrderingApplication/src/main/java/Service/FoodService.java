@@ -2,39 +2,63 @@ package Service;
 
 import Model.Food;
 import Repository.FoodImpl;
+import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FoodService
 {
     FoodImpl food = FoodImpl.getInstance();
 
-    public HashMap<String, Food> fetchFoodItems(String menuId)
+    public String fetchFoodItems(int menuId)
     {
-        return food.getFoodItems(menuId);
+        JSONArray jsonArray = new JSONArray();
+
+        for (Map<Integer, Model.Food> map : food.getFoodItems(menuId))
+        {
+            jsonArray.put(map.values());
+        }
+
+        return jsonArray.toString();
+
     }
 
-    public String addFoodItem(String menuId, String foodId, String name,String price)
+    public String addFoodItem(int menuId, int foodId, String name, String price)
     {
-        if (food.checkNull(menuId))
+        AtomicBoolean isItemPresent = new AtomicBoolean(false);
+
+        ArrayList<HashMap<Integer, Food>> foodList = food.getFoodItems(menuId);
+
+        if (foodList == null)
         {
-            if (!food.checkNull(menuId, foodId))
+            food.addFoodItem(menuId, new Food(foodId, name, price));
+
+            return "success";
+        }
+
+        for (Map<Integer, Model.Food> map : foodList)
+        {
+            if (map.containsKey(foodId))
             {
-                food.addFoodItemToList(menuId, new Food(foodId, name, price));
+                isItemPresent.set(true);
 
-                return "success";
-
+                break;
             }
+        }
 
-            else
-            {
-                return "food item already exist";
-            }
+        if (isItemPresent.get())
+        {
+            return "food item already exist";
         }
 
         else
         {
-            return "menu doesn't exist";
+            food.addFoodItemToList(menuId, new Food(foodId, name, price));
+
+            return "success";
         }
     }
 }

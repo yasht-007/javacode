@@ -1,12 +1,7 @@
 package Service;
 
-import Model.Menu;
 import Repository.MenuImpl;
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MenuService
 {
@@ -21,7 +16,7 @@ public class MenuService
         return jsonArray.toString();
     }
 
-    public String addToMenu(String id, String name)
+    public String addToMenu(int id, String name)
     {
         if (!menu.checkNull(id))
         {

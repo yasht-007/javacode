@@ -47,34 +47,57 @@ public class Bootstrap
 
                 else
                 {
-                    try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
+                    String menuId = null;
+
+                    String foodItemId = null;
+
+                    displayMainMenu();
+
+                    var choice = reader.readLine();
+
+                    switch (choice)
                     {
-                        displayMainMenu();
+                        case "1" -> handleMenu(reader);
 
-                        var choice = reader.readLine();
 
-                        switch (choice)
+                        case "2" ->
                         {
-                            case "1" ->
-                            {
-                                var menuOption = handleMenu(customerContactNumber, connection, reader);
 
-                                if (menuOption != null)
-                                {
-                                    System.out.println(menuOption);
-                                }
+                        }
+
+                        case "3" ->
+                        {
+                            loggedIn.set(false);
+
+                            customerContactNumber = null;
+
+                        }
+
+                        default ->
+                                System.out.println(Const.RED_COLOUR + "Please enter valid choice" + Const.RESET_COLOUR);
+                    }
+
+                    if (!choice.equals("3"))
+                    {
+
+                        menuId = UserInput.validateInput(Const.DIGITS_REGEX, "Please enter your choice here : ", Const.FOOD_INVALID_CHOICE_ERROR_MESSAGE, reader);
+
+                        if (menuId != null)
+                        {
+                            handleFoodItems(menuId, reader);
+
+                            System.out.println(Const.NEW_LINE_SEPARATOR + Const.GREEN_COLOUR + "To go back to main menu enter 999" + Const.RESET_COLOUR);
+
+                            foodItemId = UserInput.validateInput(Const.DIGITS_REGEX, "Please enter your choice to add your order to cart : ", Const.FOOD_INVALID_CHOICE_ERROR_MESSAGE, reader);
+
+                            if (foodItemId.equals("999"))
+                            {
+                                handleMenu(reader);
                             }
 
-                            case "2" ->
+                            else
                             {
-
-                            }
-
-                            case "3" ->
-                            {
-                                loggedIn.set(false);
-
-                                customerContactNumber = null;
+                                System.out.println("ok");
                             }
                         }
                     }
@@ -217,33 +240,67 @@ public class Bootstrap
 
     }
 
-    public static String handleMenu(String contactNumber, Connection connection, BufferedReader reader) throws Exception
+    public static void handleMenu(BufferedReader reader) throws Exception
     {
-        System.out.println(Const.NEW_LINE_SEPARATOR + "Select what you want to choose from menu..." + Const.NEW_LINE_SEPARATOR);
-
-        connection.write("getMenu");
-
-        String response = connection.read();
-
-        if (response == null)
+        try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
         {
-            System.out.println(Const.RED_COLOUR + "Menu response not received from server" + Const.RESET_COLOUR);
+            System.out.println(Const.NEW_LINE_SEPARATOR + "Select what you want to choose from menu..." + Const.NEW_LINE_SEPARATOR);
 
-            return null;
+            connection.write("getMenu");
+
+            String response = connection.read();
+
+            if (response == null)
+            {
+                System.out.println(Const.RED_COLOUR + "Menu response not received from server" + Const.RESET_COLOUR);
+
+                return;
+            }
+
+            JSONArray menuResponse = new JSONArray(response);
+
+            for (int index = 0; index < menuResponse.getJSONArray(0).length(); index++)
+            {
+                JSONObject jsonObject = menuResponse.getJSONArray(0).getJSONObject(index);
+
+                System.out.println(jsonObject.getInt("id") + Const.DOT_SEPARATOR + " " + jsonObject.getString("name"));
+            }
+
+        }
+    }
+
+    public static void handleFoodItems(String menuId, BufferedReader reader) throws Exception
+    {
+        try (Connection connection = new Connection(Const.HOST, Const.PORT_NUMBER))
+        {
+            connection.write("getFoodMenu");
+
+            connection.write(new JSONObject().put("menuId", menuId).toString());
+
+            String response = connection.read();
+
+            if (response == null)
+            {
+                System.out.println(Const.RED_COLOUR + "Food Menu response not received from server" + Const.RESET_COLOUR);
+
+                return;
+            }
+
+            JSONArray foodMenuResponse = new JSONArray(response);
+
+            System.out.println(Const.NEW_LINE_SEPARATOR + "Item No     Name     Price " + Const.NEW_LINE_SEPARATOR);
+
+
+            for (int index = 0; index < foodMenuResponse.length(); index++)
+            {
+
+                JSONObject jsonObject = foodMenuResponse.getJSONArray(index).getJSONObject(0);
+
+                System.out.println(jsonObject.getInt("id") + Const.DOT_SEPARATOR + "\t" + jsonObject.getString("name") + "\t\t" + jsonObject.getString("price"));
+            }
+
         }
 
-        JSONArray menuResponse = new JSONArray(response);
-
-        for (int index = 0; index < menuResponse.getJSONArray(0).length(); index++)
-        {
-            JSONObject jsonObject = menuResponse.getJSONArray(0).getJSONObject(index);
-
-            System.out.println(jsonObject.getString("id") + Const.DOT_SEPARATOR + " " + jsonObject.getString("name"));
-        }
-
-        System.out.print(Const.NEW_LINE_SEPARATOR + "Please enter your choice here : ");
-
-        return reader.readLine();
     }
 
 }

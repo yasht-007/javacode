@@ -1,13 +1,15 @@
 package Repository;
 
 import Model.Food;
-import Model.Menu;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface FoodRepository
 {
-    HashMap<String, Model.Food> getFoodItems(String menuId);
+    List<HashMap<Integer, Food>> getFoodItems(int foodID);
 
-    void addFoodItemToList(String menuId, Model.Food item);
+    void addFoodItemToList(int menuId, Model.Food item);
+
+    void addFoodItem(int menuId, Model.Food item);
 }

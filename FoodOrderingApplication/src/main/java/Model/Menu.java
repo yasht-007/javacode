@@ -2,7 +2,7 @@ package Model;
 
 public class Menu
 {
-    private String id;
+    private int id;
     private String name;
 
     public Menu()
@@ -10,14 +10,14 @@ public class Menu
 
     }
 
-    public Menu(String id, String name)
+    public Menu(int id, String name)
     {
         setId(id);
 
         setName(name);
     }
 
-    public String getId()
+    public int getId()
     {
         return id;
     }
@@ -27,7 +27,7 @@ public class Menu
         return name;
     }
 
-    public void setId(String id)
+    public void setId(int id)
     {
         this.id = id;
     }

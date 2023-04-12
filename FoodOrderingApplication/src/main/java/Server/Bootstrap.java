@@ -76,6 +76,13 @@ public class Bootstrap
 
                                 connectionOutput.flush();
                             }
+
+                            case "getFoodMenu" ->
+                            {
+                                JSONObject data = new JSONObject(connectionInput.readUTF());
+
+                                connectionOutput.writeUTF(new FoodService().fetchFoodItems(Integer.parseInt(data.getString("menuId"))));
+                            }
                         }
                     }
                     catch (Exception exception)
@@ -114,52 +121,52 @@ public class Bootstrap
 
     public static void addMenuItems(MenuService menuService)
     {
-        menuService.addToMenu("1", "Starters");
+        menuService.addToMenu(1, "Starters");
 
-        menuService.addToMenu("2", "Dishes");
+        menuService.addToMenu(2, "Dishes");
 
-        menuService.addToMenu("3", "Thali");
+        menuService.addToMenu(3, "Thali");
 
-        menuService.addToMenu("4", "Drinks");
+        menuService.addToMenu(4, "Drinks");
 
-        menuService.addToMenu("5", "Ice creams");
+        menuService.addToMenu(5, "Ice creams");
     }
 
     public static void addFoodItems(FoodService foodService)
     {
-        foodService.addFoodItem("1", "1", "Samosa Chaat", "50");
+        foodService.addFoodItem(1, 1, "Samosa Chaat", "50");
 
-        foodService.addFoodItem("1", "2", "Aloo Tikki", "30");
+        foodService.addFoodItem(1, 2, "Aloo Tikki", "30");
 
-        foodService.addFoodItem("1", "3", "Corn Chaat", "60");
+        foodService.addFoodItem(1, 3, "Corn Chaat", "60");
 
-        foodService.addFoodItem("2", "1", "Paneer Tikka", "150");
+        foodService.addFoodItem(2, 1, "Paneer Tikka", "150");
 
-        foodService.addFoodItem("2", "2", "Mix Veg", "150");
+        foodService.addFoodItem(2, 2, "Mix Veg", "150");
 
-        foodService.addFoodItem("2", "3", "Chole Bhatoore", "90");
+        foodService.addFoodItem(2, 3, "Chole Bhatoore", "90");
 
-        foodService.addFoodItem("2", "4", "Malai Kopta", "200");
+        foodService.addFoodItem(2, 4, "Malai Kopta", "200");
 
-        foodService.addFoodItem("3", "1", "Fix Punjabi Thali", "200");
+        foodService.addFoodItem(3, 1, "Fix Punjabi Thali", "200");
 
-        foodService.addFoodItem("3", "2", "Fix Gujarati Thali", "180");
+        foodService.addFoodItem(3, 2, "Fix Gujarati Thali", "180");
 
-        foodService.addFoodItem("4", "1", "Coco Coala", "20");
+        foodService.addFoodItem(4, 1, "Coco Coala", "20");
 
-        foodService.addFoodItem("4", "2", "Fainta", "30");
+        foodService.addFoodItem(4, 2, "Fainta", "30");
 
-        foodService.addFoodItem("4", "3", "Pepsi", "20");
+        foodService.addFoodItem(4, 3, "Pepsi", "20");
 
-        foodService.addFoodItem("4", "4", "Thumps Up", "20");
+        foodService.addFoodItem(4, 4, "Thumps Up", "20");
 
-        foodService.addFoodItem("5", "1", "Chocolate scoop", "30");
+        foodService.addFoodItem(5, 1, "Chocolate scoop", "30");
 
-        foodService.addFoodItem("5", "2", "Vanilla scoop", "30");
+        foodService.addFoodItem(5, 2, "Vanilla scoop", "30");
 
-        foodService.addFoodItem("5", "3", "Amerian Dryfruit", "50");
+        foodService.addFoodItem(5, 3, "Amerian Dryfruit", "50");
 
-        foodService.addFoodItem("5", "4", "Black Currant", "50");
+        foodService.addFoodItem(5, 4, "Black Currant", "50");
     }
 
 }

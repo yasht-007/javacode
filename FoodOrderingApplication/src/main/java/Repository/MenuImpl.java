@@ -8,7 +8,7 @@ public class MenuImpl implements MenuRepository
 {
 
     private static MenuImpl menuImpl = null;
-    private static final HashMap<String, Model.Menu> menu = new HashMap<>();
+    private static final HashMap<Integer, Model.Menu> menu = new HashMap<>();
 
     private MenuImpl()
     {
@@ -26,24 +26,18 @@ public class MenuImpl implements MenuRepository
     }
 
     @Override
-    public HashMap<String, Model.Menu> getMenu()
+    public HashMap<Integer, Model.Menu> getMenu()
     {
-        return (HashMap<String, Model.Menu>) menu.clone();
+        return (HashMap<Integer, Model.Menu>) menu.clone();
     }
 
     @Override
-    public void addItemToMenu(String id, String name)
+    public void addItemToMenu(int id, String name)
     {
         menu.put(id, new Model.Menu(id, name));
     }
 
-    @Override
-    public boolean isItemExistInMenu(String menuId)
-    {
-        return menu.containsKey(menuId);
-    }
-
-    public boolean checkNull(String id)
+    public boolean checkNull(int id)
     {
         return menu.containsKey(id);
     }
