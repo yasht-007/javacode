@@ -16,7 +16,7 @@ public class CartImpl implements CartRepository
     {
     }
 
-    public static synchronized CartImpl getInstance()
+    public static CartImpl getInstance()
     {
 
         if (cartImpl == null)
@@ -44,6 +44,7 @@ public class CartImpl implements CartRepository
         cart.put(contactNumber, list);
     }
 
+    @Override
     public void clearCart(String contactNumber)
     {
         cart.remove(contactNumber);

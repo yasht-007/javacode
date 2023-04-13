@@ -12,7 +12,7 @@ public class CustomerImpl implements CustomerRepository
     {
     }
 
-    public static synchronized CustomerImpl getInstance()
+    public static CustomerImpl getInstance()
     {
 
         if (customerImpl == null)

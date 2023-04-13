@@ -8,4 +8,5 @@ public interface CartRepository
     void addToCart(String contactNumber, Model.Food foodItem);
     boolean isEmpty(String contactNumber);
     void appendToCart(String contactNumber, Model.Food foodItem);
+    void clearCart(String contactNumber);
 }

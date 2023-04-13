@@ -12,7 +12,7 @@ public class MenuImpl implements MenuRepository
     {
     }
 
-    public static synchronized MenuImpl getInstance()
+    public static MenuImpl getInstance()
     {
 
         if (menuImpl == null)
@@ -35,6 +35,7 @@ public class MenuImpl implements MenuRepository
         menu.put(id, new Model.Menu(id, name));
     }
 
+    @Override
     public boolean isEmpty(int id)
     {
         return menu.containsKey(id);

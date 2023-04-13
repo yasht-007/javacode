@@ -9,7 +9,7 @@ public interface FoodRepository
 {
     List<HashMap<Integer, Food>> getFoodItems(int foodID);
 
-    void addFoodItemToList(int menuId, Model.Food item);
+    void appendFoodItemToList(int menuId, Model.Food item);
 
     void addFoodItem(int menuId, Model.Food item);
 }

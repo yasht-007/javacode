@@ -16,7 +16,7 @@ public class FoodImpl implements FoodRepository
     {
     }
 
-    public static synchronized FoodImpl getInstance()
+    public static FoodImpl getInstance()
     {
 
         if (foodImpl == null)
@@ -35,7 +35,7 @@ public class FoodImpl implements FoodRepository
     }
 
     @Override
-    public void addFoodItemToList(int menuId, Food item)
+    public void appendFoodItemToList(int menuId, Food item)
     {
         HashMap<Integer, Model.Food> food = new HashMap<>();
 

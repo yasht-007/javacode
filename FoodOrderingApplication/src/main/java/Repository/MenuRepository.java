@@ -6,4 +6,5 @@ public interface MenuRepository
 {
     HashMap<Integer, Model.Menu> getMenu();
     void addItemToMenu(int id, String name);
+    boolean isEmpty(int id);
 }

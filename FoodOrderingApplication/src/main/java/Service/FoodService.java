@@ -2,16 +2,17 @@ package Service;
 
 import Model.Food;
 import Repository.FoodImpl;
+import Repository.FoodRepository;
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FoodService
 {
-    private final FoodImpl food = FoodImpl.getInstance();
+    private final FoodRepository food = FoodImpl.getInstance();
     public String fetchFoodItems(int menuId)
     {
         JSONArray jsonArray = new JSONArray();
@@ -29,7 +30,7 @@ public class FoodService
     {
         AtomicBoolean isItemPresent = new AtomicBoolean(false);
 
-        ArrayList<HashMap<Integer, Food>> foodList = food.getFoodItems(menuId);
+        List<HashMap<Integer, Food>> foodList = food.getFoodItems(menuId);
 
         if (foodList == null)
         {
@@ -55,7 +56,7 @@ public class FoodService
 
         else
         {
-            food.addFoodItemToList(menuId, new Food(foodId, name, price));
+            food.appendFoodItemToList(menuId, new Food(foodId, name, price));
 
             return "success";
         }

@@ -1,11 +1,12 @@
 package Service;
 
 import Repository.MenuImpl;
+import Repository.MenuRepository;
 import org.json.JSONArray;
 
 public class MenuService
 {
-    Repository.MenuImpl menu = MenuImpl.getInstance();
+    MenuRepository menu = MenuImpl.getInstance();
 
     public String fetchMenu()
     {

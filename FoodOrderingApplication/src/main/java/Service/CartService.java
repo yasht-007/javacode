@@ -2,6 +2,7 @@ package Service;
 
 import Model.Food;
 import Repository.CartImpl;
+import Repository.CartRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public class CartService
 {
-    private final CartImpl cart = CartImpl.getInstance();
+    private final CartRepository cart = CartImpl.getInstance();
 
     public String addItemToCart(String contactNumber, int menuId, int foodId)
     {

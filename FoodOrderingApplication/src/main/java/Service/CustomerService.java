@@ -1,10 +1,11 @@
 package Service;
 
 import Repository.CustomerImpl;
+import Repository.CustomerRepository;
 
 public class CustomerService
 {
-    CustomerImpl customer = CustomerImpl.getInstance();
+    CustomerRepository customer = CustomerImpl.getInstance();
 
     public String loginCustomer(String contactNumber, String password)
     {
