@@ -127,6 +127,33 @@ public class Bootstrap
                         {
                             exception.printStackTrace();
                         }
+
+                        try
+                        {
+                            socket.close();
+
+                            System.out.println(Const.NEW_LINE_SEPARATOR + Const.RED_COLOUR + socket.getRemoteSocketAddress() + " disconnected" + Const.RESET_COLOUR);
+                        }
+
+                        catch (Exception socketException)
+                        {
+                            System.out.println(socketException.getMessage());
+                        }
+                    }
+
+                    finally
+                    {
+                        try
+                        {
+                            socket.close();
+
+                            System.out.println(Const.RED_COLOUR + socket.getRemoteSocketAddress() + " disconnected" + Const.RESET_COLOUR);
+                        }
+
+                        catch (Exception socketException)
+                        {
+                            System.out.println(socketException.getMessage());
+                        }
                     }
                 });
             }

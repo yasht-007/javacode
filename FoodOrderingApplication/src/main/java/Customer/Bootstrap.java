@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.InputStreamReader;
+import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -122,15 +124,11 @@ public class Bootstrap
                 }
                 catch (Exception exception)
                 {
-                    if (exception.getMessage().equalsIgnoreCase("broken pipe"))
+                    if (exception instanceof SocketException || exception instanceof EOFException)
                     {
-                        System.out.println(Const.RED_COLOUR + "server is down" + Const.RESET_COLOUR);
+                        System.out.println(Const.NEW_LINE_SEPARATOR + Const.RED_COLOUR + "server unreachable" + Const.RESET_COLOUR);
                     }
 
-                    else if (exception.getMessage().equalsIgnoreCase("connection refused"))
-                    {
-                        System.out.println(Const.NEW_LINE_SEPARATOR + Const.RED_COLOUR + "Server unreachable" + Const.RESET_COLOUR);
-                    }
                     else
                     {
                         exception.printStackTrace();
