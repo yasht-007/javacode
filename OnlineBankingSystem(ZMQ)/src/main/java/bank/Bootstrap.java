@@ -14,7 +14,7 @@ public class Bootstrap
     public static void main(String[] args)
     {
 
-        try (ZContext context = new ZContext(); ZMQ.Socket socket = context.createSocket(SocketType.PAIR))
+        try (ZContext context = new ZContext(2); ZMQ.Socket socket = context.createSocket(SocketType.PAIR))
         {
 
             if (socket.bind("tcp://*:9999"))
