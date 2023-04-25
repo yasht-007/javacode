@@ -1,0 +1,558 @@
+[
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "ab60db13-779f-4986-a70e-90d7f96ae1a1",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.674.10892.2.3.1.11.0": "dell.chassis.cmc.ambient.temperature.celsius",
+      ".1.3.6.1.4.1.674.10892.2.3.1.10.0": "dell.chassis.front.panel.ambient.temperature.celsius",
+      ".1.3.6.1.4.1.674.10892.2.3.1.8.0": "dell.chassis.temperature.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.7.0": "dell.chassis.blade.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.6.0": "dell.chassis.fan.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.5.0": "dell.chassis.power.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.3.0": "dell.chassis.ikvm.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.4.0": "dell.chassis.redundancy.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.1.0": "dell.chassis.status",
+      ".1.3.6.1.4.1.674.10892.2.3.1.2.0": "dell.chassis.i/o.subsystem.status",
+      ".1.3.6.1.4.1.674.10892.2.1.1.6.0": "dell.chassis.service.tag",
+      ".1.3.6.1.4.1.674.10892.2.1.1.9.0": "dell.chassis.location",
+      ".1.3.6.1.4.1.674.10892.2.1.2.1.0": "dell.chassis.firmware.version",
+      ".1.3.6.1.4.1.674.10892.2.1.2.2.0": "dell.chassis.ikvm.firmware.version",
+      ".1.3.6.1.4.1.674.10892.2.1.1.15.0": "dell.chassis.data.center",
+      ".1.3.6.1.4.1.674.10892.2.1.1.17.0": "dell.chassis.rack",
+      ".1.3.6.1.4.1.674.10892.2.1.1.10.0": "dell.chassis.name",
+      ".1.3.6.1.4.1.674.10892.2.3.1.12.0": "dell.chassis.cmc.processor.temperature.celsius"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Dell Chassis Service Tag"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.674.10892.2.5.1.1.4",
+    "oid.group.id": "4cbb3694-16ba-452e-95d9-b70010d6a765",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.674.10892.2.5.1.1.3": "chassis.server.service.tag",
+      ".1.3.6.1.4.1.674.10892.2.5.1.1.5": "chassis.server.slot",
+      ".1.3.6.1.4.1.674.10892.2.5.1.1.4": "chassis.server"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Chassis Server"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.674.10892.2.4.2.1.3",
+    "oid.group.id": "db5b3245-6749-41b9-ad4f-82adc9e42db4",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.674.10892.2.4.2.1.3": "power.supply",
+      ".1.3.6.1.4.1.674.10892.2.4.2.1.5": "power.supply.reading.volt"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Power Supply"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "d509206c-504c-40e6-8b14-048945a417ec",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9.1.0.0": "juniper.routing.engine.1.temperature.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.11.9.1.0.0": "juniper.routing.engine.1.memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.11.9.2.0.0": "juniper.routing.engine.2.memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9.2.0.0": "juniper.routing.engine.2.temperature.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8.9.1.0.0": "juniper.routing.engine.1.cpu.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8.9.2.0.0": "juniper.routing.engine.2.cpu.%"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Juniper Routing Engine 1 CPU (%)"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.4",
+    "oid.group.id": "01495d54-967a-4634-ba22-fc1b1d77f111",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.4": "fan",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.4": "fan.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Fan"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.2",
+    "oid.group.id": "4127d659-83b2-453d-8462-06d789f5b8bb",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.2": "power.supply",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.2": "power.supply.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Power Supply"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.9",
+    "oid.group.id": "1022cfe4-0298-4992-802d-f7960c3618ea",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.9": "temperature.sensor",
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9": "temperature.sensor.reading.celsius"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Temperature Sensor"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.9",
+    "oid.group.id": "2e895c51-caf4-4d46-a7ea-d7532e109a07",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.9": "routing.engine",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.9": "routing.engine.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Routing Engine"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.7",
+    "oid.group.id": "b88eb2a5-e7f9-40ba-9f71-98502f202a4f",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.7": "fpc",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.7": "fpc.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "FPC"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.7",
+    "oid.group.id": "c64be3b3-62cb-46ac-b69e-d720650d221e",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.7": "fpc.temperature.sensor.reading.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.7": "fpc.temperature.sensor"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "FPC Temperature Sensor"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.8.1.6",
+    "oid.group.id": "7cd0bdc2-d467-4e8b-ab95-49caa163ef47",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.8.1.6": "chassis.component",
+      ".1.3.6.1.4.1.2636.3.1.8.1.7": "chassis.component.serial.no",
+      ".1.3.6.1.4.1.2636.3.1.8.1.12": "chassis.component.chassis"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Chassis Component"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.2",
+    "oid.group.id": "dfae7f2c-3df0-46a5-b410-fa384d472ad4",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.8": "virtual.chassis.model",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.9": "virtual.chassis.location",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.6": "virtual.chassis.priority",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.7": "virtual.chassis.uptime.seconds",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.4": "virtual.chassis.mac.address",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.5": "virtual.chassis.version",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.2": "virtual.chassis",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.3": "virtual.chassis.role"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Virtual Chassis"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "c1c15d50-595c-4d07-967a-a06e9c6cec4d",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9.1.0.0": "juniper.routing.engine.1.temperature.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.11.9.1.0.0": "juniper.routing.engine.1.memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.11.9.2.0.0": "juniper.routing.engine.2.memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9.2.0.0": "juniper.routing.engine.2.temperature.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8.9.1.0.0": "routing.engine.1.cpu.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8.9.2.0.0": "juniper.routing.engine.2.cpu.%"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Routing Engine 1 CPU (%)"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.4",
+    "oid.group.id": "4fccad5d-7f41-40c5-a95b-43bc145c2779",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.4": "fan",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.4": "fan.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Fan"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.2",
+    "oid.group.id": "5a91d082-6720-4378-9f33-95f266bbcab6",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.2": "power.supply",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.2": "power.supply.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Power Supply"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.9",
+    "oid.group.id": "69ef5f07-17d3-4d4f-bbd1-74fa65871fec",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.9": "temperature.sensor",
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9": "temperature.sensor.reading.celsius"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Temperature Sensor"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.9",
+    "oid.group.id": "c97c888f-ea27-4f34-804e-aac728a216c2",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.9": "routing.engine",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.9": "routing.engine.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Routing Engine"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.7",
+    "oid.group.id": "e68fd0eb-0760-4648-bca4-8d027e1c2eb5",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.7": "fpc",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.7": "fpc.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "FPC"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.7",
+    "oid.group.id": "2eaabb49-3484-4192-9fc1-2fda18e21a18",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.7": "fpc.temperature.sensor.reading.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.7": "fpc.temperature.sensor"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "FPC Temperature Sensor"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.8.1.6",
+    "oid.group.id": "ff0afab8-627c-4410-b1d4-a70b02ff1620",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.8.1.6": "chassis.component",
+      ".1.3.6.1.4.1.2636.3.1.8.1.7": "chassis.component.serial.no",
+      ".1.3.6.1.4.1.2636.3.1.8.1.12": "chassis.component.chassis"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Chassis Component"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.2",
+    "oid.group.id": "f49013e0-be97-4ac6-9310-d25996847cf8",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.8": "virtual.chassis.model",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.9": "virtual.chassis.location",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.6": "virtual.chassis.priority",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.7": "virtual.chassis.uptime.seconds",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.4": "virtual.chassis.mac.address",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.5": "virtual.chassis.version",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.2": "virtual.chassis",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.3": "virtual.chassis.role"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Virtual Chassis"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "f839451a-d310-4523-a7ca-9a406344f9b0",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2021.11.52.0": "fatpipe.raw.system.cpu.time",
+      ".1.3.6.1.4.1.2021.11.53.0": "fatpipe.raw.idle.cpu.time",
+      ".1.3.6.1.4.1.2021.11.50.0": "fatpipe.raw.user.cpu.time",
+      ".1.3.6.1.4.1.2021.11.51.0": "fatpipe.raw.nice.cpu.time",
+      ".1.3.6.1.4.1.2021.4.4.0": "fatpipe.available.swap.space",
+      ".1.3.6.1.4.1.2021.4.3.0": "fatpipe.total.swap.size",
+      ".1.3.6.1.4.1.2021.4.6.0": "fatpipe.total.ram.used",
+      ".1.3.6.1.4.1.2021.4.5.0": "fatpipe.total.ram.in.machine",
+      ".1.3.6.1.4.1.2021.4.11.0": "fatpipe.total.ram.free",
+      ".1.3.6.1.4.1.2021.4.13.0": "fatpipe.total.ram.shared",
+      ".1.3.6.1.4.1.2021.4.14.0": "fatpipe.total.ram.buffered",
+      ".1.3.6.1.4.1.2021.4.15.0": "fatpipe.total.cached.memory",
+      ".1.3.6.1.4.1.2021.11.11.0": "fatpipe.percentages.of.idle.cpu.time",
+      ".1.3.6.1.4.1.2021.11.10.0": "fatpipe.percentages.of.system.cpu.time",
+      ".1.3.6.1.4.1.2021.11.9.0": "fatpipe.percentage.of.user.cpu.time"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "CPU Idle (%)"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "f476cae5-c751-4ef4-b0f7-4c49b506b082",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.1872.2.5.3.3.14.2.1.0": "alteon.ha.status",
+      "(.1.3.6.1.4.1.1872.2.5.1.2.8.3*100)/(.1.3.6.1.4.1.1872.2.5.1.2.8.1+.1.3.6.1.4.1.1872.2.5.1.2.8.3)": "alteon.memory.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.19.0": "alteon.http.2.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.25.0": "alteon.http.2.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.15.0": "alteon.http.transactions/sec",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.26.0": "alteon.http.1.1.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.27.0": "alteon.http.1.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.21.0": "alteon.http.1.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.18.0": "alteon.serial.no",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.30.0": "alteon.version",
+      ".1.3.6.1.4.1.1872.2.5.1.2.2.1.0": "alteon.cpu.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.5.2.0": "alteon.active.sessions",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.20.0": "alteon.http.1.1.connections"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Alteon Serial No"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "9c6bab3c-6925-47f7-b2f6-503d200eb34c",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.1872.2.5.3.3.14.2.1.0": "alteon.ha.status",
+      "(.1.3.6.1.4.1.1872.2.5.1.2.8.3*100)/(.1.3.6.1.4.1.1872.2.5.1.2.8.1+.1.3.6.1.4.1.1872.2.5.1.2.8.3)": "alteon.memory.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.19.0": "alteon.http.2.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.25.0": "alteon.http.2.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.15.0": "alteon.http.transactions/sec",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.26.0": "alteon.http.1.1.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.27.0": "alteon.http.1.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.21.0": "alteon.http.1.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.18.0": "alteon.serial.no",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.30.0": "alteon.version",
+      ".1.3.6.1.4.1.1872.2.5.1.2.2.1.0": "alteon.cpu.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.5.2.0": "alteon.active.sessions",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.20.0": "alteon.http.1.1.connections"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Alteon Serial No"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "e7d78361-63db-4adf-b5f9-7e853745551d",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.1872.2.5.3.3.14.2.1.0": "alteon.ha.status",
+      "(.1.3.6.1.4.1.1872.2.5.1.2.8.3*100)/(.1.3.6.1.4.1.1872.2.5.1.2.8.1+.1.3.6.1.4.1.1872.2.5.1.2.8.3)": "alteon.memory.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.19.0": "alteon.http.2.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.25.0": "alteon.http.2.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.15.0": "alteon.http.transactions/sec",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.26.0": "alteon.http.1.1.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.27.0": "alteon.http.1.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.21.0": "alteon.http.1.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.18.0": "alteon.serial.no",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.30.0": "alteon.version",
+      ".1.3.6.1.4.1.1872.2.5.1.2.2.1.0": "alteon.cpu.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.5.2.0": "alteon.active.sessions",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.20.0": "alteon.http.1.1.connections"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Alteon Serial No"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "c75f3b63-1646-4ca1-8476-afb69e6ba24f",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.1872.2.5.3.3.14.2.1.0": "alteon.ha.status",
+      "(.1.3.6.1.4.1.1872.2.5.1.2.8.3*100)/(.1.3.6.1.4.1.1872.2.5.1.2.8.1+.1.3.6.1.4.1.1872.2.5.1.2.8.3)": "alteon.memory.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.19.0": "alteon.http.2.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.25.0": "alteon.http.2.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.15.0": "alteon.http.transactions/sec",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.26.0": "alteon.http.1.1.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.27.0": "alteon.http.1.0.requests",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.21.0": "alteon.http.1.0.connections",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.18.0": "alteon.serial.no",
+      ".1.3.6.1.4.1.1872.2.5.1.3.1.30.0": "alteon.version",
+      ".1.3.6.1.4.1.1872.2.5.1.2.2.1.0": "alteon.cpu.%",
+      ".1.3.6.1.4.1.1872.2.5.4.2.5.2.0": "alteon.active.sessions",
+      ".1.3.6.1.4.1.1872.2.5.4.2.24.20.0": "alteon.http.1.1.connections"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "Alteon Serial No"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.id": "c86bf8e4-5204-4be4-ab63-c6063f73c7ae",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9.1.0.0": "juniper.routing.engine.1.temperature.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.11.9.1.0.0": "juniper.routing.engine.1.memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.11.9.2.0.0": "juniper.routing.engine.2.memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9.2.0.0": "juniper.routing.engine.2.temperature.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.12": "memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8.9.1.0.0": "routing.engine.1.cpu.%",
+      ".1.3.6.1.4.1.2636.3.1.16.0": "memory.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8": "cpu.%",
+      ".1.3.6.1.4.1.2636.3.1.13.1.8.9.2.0.0": "juniper.routing.engine.2.cpu.%"
+    },
+    "oid.group.type": "scalar",
+    "oid.group.name": "CPU (%)"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.4",
+    "oid.group.id": "5ce73d41-5a2f-411a-94ab-7d65e0b80092",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.4": "fan",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.4": "fan.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Fan"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.2",
+    "oid.group.id": "124e2860-e4e3-44c1-8b6b-20318bc9324e",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.2": "power.supply",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.2": "power.supply.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Power Supply"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.9",
+    "oid.group.id": "969a2efc-1553-436f-b393-436b01f9f23a",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.9": "temperature.sensor",
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.9": "temperature.sensor.reading.celsius"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Temperature Sensor"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.9",
+    "oid.group.id": "4dbe5bfc-7a4a-401c-be78-13a66ca65fff",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.9": "routing.engine",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.9": "routing.engine.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Routing Engine"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.7",
+    "oid.group.id": "cec9dda0-422b-4472-b6a0-a893de7d3fae",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.7": "fpc",
+      ".1.3.6.1.4.1.2636.3.1.13.1.6.7": "fpc.state"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "FPC"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.13.1.5.7",
+    "oid.group.id": "6c0bf6ac-ec20-4a7d-879e-1311b116a541",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.13.1.7.7": "fpc.temperature.sensor.reading.celsius",
+      ".1.3.6.1.4.1.2636.3.1.13.1.5.7": "fpc.temperature.sensor"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "FPC Temperature Sensor"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.1.8.1.6",
+    "oid.group.id": "5a12707c-5c73-4975-9341-472abcab730e",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.1.8.1.6": "chassis.component",
+      ".1.3.6.1.4.1.2636.3.1.8.1.7": "chassis.component.serial.no",
+      ".1.3.6.1.4.1.2636.3.1.8.1.12": "chassis.component.chassis"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Chassis Component"
+  },
+  {
+    "oid.group.polling.interval.sec": 600,
+    "oid.group.parent.oid": ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.2",
+    "oid.group.id": "528afee9-d141-45b8-94ef-f16ec079fccf",
+    "oid.group.device.type": "SNMP Device",
+    "oid.group.polling.timeout.sec": 60,
+    "oid.group.oids": {
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.8": "virtual.chassis.model",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.9": "virtual.chassis.location",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.6": "virtual.chassis.priority",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.7": "virtual.chassis.uptime.seconds",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.4": "virtual.chassis.mac.address",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.5": "virtual.chassis.version",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.2": "virtual.chassis",
+      ".1.3.6.1.4.1.2636.3.40.1.4.1.1.1.3": "virtual.chassis.role"
+    },
+    "oid.group.type": "tabular",
+    "oid.group.name": "Virtual Chassis"
+  }
+]
