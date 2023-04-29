@@ -6,11 +6,17 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.FileSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class FuturePromiseExample
-{
-    public static void main(String[] args)
-    {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class FuturePromiseExample {
+    private static final Logger LOG = LoggerFactory.getLogger(FuturePromiseExample.class);
+
+    public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
 
         FileSystem fs = vertx.fileSystem();
@@ -32,16 +38,30 @@ public class FuturePromiseExample
 
         Future<Void> dataInsert = fs.writeFile("/home/yash/coordinationvertex.txt", Buffer.buffer("Hello from yash"));
 
-        Future<Void> moveFile = fs.move("/home/yash/coordinationvertex.txt", "/home/yash/Documents/coordinationvertex.txt");
+        Future<Void> moveFile = fs.move("/home/yash/coordinationvertex.txt", "/home/yash/Out/coordinationvertex.txt");
 
-        CompositeFuture.all(fileCreation, dataInsert, moveFile).onComplete(result ->
+
+        Future<Void> afileCreation = fs.createFile("/home/yash/coordinationvertexa.txt");
+
+        Future<Void> adataInsert = fs.writeFile("/home/yash/coordinationvertexa.txt", Buffer.buffer("Hello from yash"));
+
+        Future<Void> amoveFile = fs.move("/home/yash/coordinationvertexa.txt", "/home/yash/Out/coordinationvertexa.txt");
+
+
+        Future<Void> bfileCreation = fs.createFile("/home/yash/coordinationvertexb.txt");
+
+        Future<Void> bdataInsert = fs.writeFile("/home/yash/coordinationvertexb.txt", Buffer.buffer("Hello from yash"));
+
+        Future<Void> bmoveFile = fs.move("/home/yash/coordinationvertexb.txt", "/home/yash/Out/coordinationvertexb.txt");
+
+
+        List<Future> futures = new ArrayList<>(Arrays.asList(fileCreation, dataInsert, moveFile, afileCreation, adataInsert, amoveFile, bfileCreation, bdataInsert, bmoveFile));
+
+        CompositeFuture.all(futures).onComplete(result ->
         {
-            if (result.succeeded())
-            {
-                System.out.println("All file operations done");
-            }
-            else
-            {
+            if (result.succeeded()) {
+                LOG.debug("All file operations done {}", FuturePromiseExample.class.getName());
+            } else {
                 result.cause().printStackTrace();
             }
         });
@@ -52,16 +72,12 @@ public class FuturePromiseExample
 
         filePromise.future().onComplete(res ->
         {
-            if (res.succeeded())
-            {
+            if (res.succeeded()) {
                 System.out.println("File written successfully!");
-            }
-            else
-            {
+            } else {
                 System.out.println("Failed to write file: " + res.cause().getMessage());
             }
         });
-
 
         vertx.close();
     }

@@ -1,9 +1,6 @@
 package simpleverticle;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
+import io.vertx.core.*;
 
 import java.util.concurrent.TimeUnit;
 

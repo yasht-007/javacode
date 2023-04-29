@@ -11,7 +11,7 @@ public class Receiver extends AbstractVerticle
     {
         EventBus eventBus = getVertx().eventBus();
 
-        eventBus.consumer("ping-message", message ->
+        eventBus.localConsumer("ping-message", message ->
         {
             System.out.println(message.body());
 

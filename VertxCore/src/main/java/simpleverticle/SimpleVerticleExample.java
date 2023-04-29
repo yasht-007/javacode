@@ -3,30 +3,23 @@ package simpleverticle;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 public class SimpleVerticleExample {
+
+
     public static void main(String[] args) throws InterruptedException {
 
-        Vertx vertx = Vertx.vertx();
+        Vertx vertx = Vertx.vertx(new VertxOptions().setMaxEventLoopExecuteTime(3).setMaxEventLoopExecuteTimeUnit(TimeUnit.SECONDS));
 
-//        vertx.deployVerticle(new VerticleExample(), res -> {
-//            if (res.succeeded()) {
-//                String id = res.result();
-//
-//                System.out.println(id);
-//
-//                vertx.undeploy(id, response -> {
-//                    if (response.succeeded()) {
-//                        System.out.println("undeploy done");
-//                    } else {
-//                        System.out.println("Undeploy failed");
-//                    }
-//                });
-//            }
-//        });
+        vertx.deployVerticle(new SimpleVerticle());
 
         JsonObject config = new JsonObject().put("foo", "bar");
 
-        vertx.deployVerticle(new SimpleVerticle());
+
+//        vertx.deployVerticle(SimpleVerticle.class.getName(),new DeploymentOptions().setInstances(3));
 //
 //        DeploymentOptions options = new DeploymentOptions().setInstances(6);
 //
@@ -38,5 +31,6 @@ public class SimpleVerticleExample {
 
 
 //        vertx.close();
+
     }
 }
