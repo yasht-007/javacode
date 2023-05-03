@@ -24,13 +24,9 @@ class SimpleVerticle extends AbstractVerticle {
 
         FileSystem fs = vertx.fileSystem();
 
-        System.out.println("Verticle is now started!" + Thread.currentThread().getName());
-
         vertx.executeBlocking(promise -> {
 
             fs.createFile(PATH, "rwxrw-r--").compose(data -> {
-
-                System.out.println("step1");
 
                 return fs.writeFile(PATH, Buffer.buffer("List of Fruits :")).onSuccess(h -> fs.open(PATH, new OpenOptions().setAppend(true), res -> {
 

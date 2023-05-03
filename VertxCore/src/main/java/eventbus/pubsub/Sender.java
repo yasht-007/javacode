@@ -2,7 +2,6 @@ package eventbus.pubsub;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 
 import java.util.concurrent.atomic.AtomicInteger;

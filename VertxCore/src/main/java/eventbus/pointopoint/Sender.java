@@ -21,6 +21,7 @@ public class Sender extends AbstractVerticle
         EventBus eventBus = vertx.eventBus();
 
         vertx.setPeriodic(3000, 2000, id ->
+
                 eventBus.request("ping-message", "Hi from Sender!", reply ->
                 {
                     if (reply.succeeded())

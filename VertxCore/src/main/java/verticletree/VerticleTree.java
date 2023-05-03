@@ -1,11 +1,9 @@
 package verticletree;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.DeploymentManager;
-import io.vertx.core.impl.VertxInternal;
+
 
 public class VerticleTree extends AbstractVerticle
 {

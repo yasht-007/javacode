@@ -1,7 +1,6 @@
-package Router;
+package router;
 
 import io.vertx.core.*;
-import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerResponse;

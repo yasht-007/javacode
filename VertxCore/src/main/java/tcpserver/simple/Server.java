@@ -23,6 +23,7 @@ public class Server extends AbstractVerticle {
             System.out.println(socket.remoteAddress() + " connected");
 
             socket.write("Hello from Server");
+
         });
 
         server.listen(9999, "localhost").onSuccess(ok -> System.out.println("Server listening on port 9999"));
