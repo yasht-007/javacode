@@ -7,6 +7,7 @@ public class Employee {
     private final int id;
     private final String name;
     private String department;
+    private long salary;
 
 
     public void setDepartment(String department) {
@@ -16,8 +17,6 @@ public class Employee {
     public void setSalary(long salary) {
         this.salary = salary;
     }
-
-    private long salary;
 
     public Employee(int id, String name, String department, long salary) {
         this.id = id;

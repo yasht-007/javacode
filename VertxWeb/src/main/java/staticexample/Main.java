@@ -18,7 +18,7 @@ public class Main extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-        
+
         Router router = Router.router(vertx);
 
         router.route(HttpMethod.GET, "/static/*").handler(StaticHandler.create(FileSystemAccess.ROOT,"/root/IdeaProjects/VertxWeb/src/main/java/staticexample/webroot"));

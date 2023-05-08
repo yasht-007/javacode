@@ -79,7 +79,7 @@ public class EmployeeManagement extends AbstractVerticle {
 
         JsonObject object = new JsonObject();
 
-        object.put("data", employeeDB.get(id).toJSON());
+        object.put("data", employeeDB.get(id));
 
         context.response().setChunked(true).putHeader("content-type", "application/json");
 

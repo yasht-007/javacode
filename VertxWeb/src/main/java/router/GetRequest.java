@@ -1,5 +1,6 @@
 package router;
 
+import crud.Employee;
 import io.vertx.core.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -21,7 +22,7 @@ public class GetRequest extends AbstractVerticle
 
         Vertx vertx = Vertx.vertx();
 
-        vertx.deployVerticle(GetRequest.class.getName(), new DeploymentOptions().setInstances(2));
+        vertx.deployVerticle(GetRequest.class.getName(), new DeploymentOptions().setInstances(3));
 
     }
 
@@ -88,7 +89,7 @@ public class GetRequest extends AbstractVerticle
 
         });
 
-        JsonObject fruits = new JsonObject(new String(Files.readAllBytes(Path.of("/root/IdeaProjects/VertxWeb/src/main/java/Router/Fruits.json"))));
+        JsonObject fruits = new JsonObject(new String(Files.readAllBytes(Path.of("/root/IdeaProjects/VertxWeb/src/main/java/router/Fruits.json"))));
 
         router.route("/fruits").order(1).respond(context ->
         {

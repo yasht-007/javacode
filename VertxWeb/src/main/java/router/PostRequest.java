@@ -28,7 +28,7 @@ public class PostRequest extends AbstractVerticle {
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
 
-        JsonObject fruits = new JsonObject(new String(Files.readAllBytes(Path.of("/root/IdeaProjects/VertxWeb/src/main/java/Router/Fruits.json"))));
+        JsonObject fruits = new JsonObject(new String(Files.readAllBytes(Path.of("/root/IdeaProjects/VertxWeb/src/main/java/router/Fruits.json"))));
 
         Router router = Router.router(vertx);
 
@@ -74,30 +74,30 @@ public class PostRequest extends AbstractVerticle {
                                 <button type="submit">Send</button>
                             </div></form>"""));
 
-//        router.route(HttpMethod.POST, "/fileupload").handler(context -> {
+        router.route(HttpMethod.POST, "/fileupload").handler(context -> {
+
+            context.request().setExpectMultipart(true).uploadHandler(uploadHandler -> uploadHandler.streamToFileSystem("uploads/" + uploadHandler.filename()));
+
+            context.request().endHandler(endhandler -> {
+
+                System.out.println("Hello");
+
+//                context.response().putHeader("Content-Type", "text/plain");
 //
-//            context.request().setExpectMultipart(true).uploadHandler(uploadHandler -> uploadHandler.streamToFileSystem("uploads/" + uploadHandler.filename()));
+//                context.response().setChunked(true);
 //
-//            context.request().endHandler(endhandler -> {
+//                for (FileUpload f : context.fileUploads()) {
 //
-//                System.out.println("Hello");
+//                    context.response().write("Filename: " + f.fileName());
 //
-////                context.response().putHeader("Content-Type", "text/plain");
-////
-////                context.response().setChunked(true);
-////
-////                for (FileUpload f : context.fileUploads()) {
-////
-////                    context.response().write("Filename: " + f.fileName());
-////
-////                    context.response().write("\n");
-////
-////                    context.response().write("Size: " + f.size());
-////
-////                    context.response().end();
-////                }
-//            });
-//        });
+//                    context.response().write("\n");
+//
+//                    context.response().write("Size: " + f.size());
+//
+//                    context.response().end();
+//                }
+            });
+        });
 
 
         router.route(HttpMethod.POST, "/fileupload").blockingHandler(blockingContext -> {
@@ -120,7 +120,8 @@ public class PostRequest extends AbstractVerticle {
         });
 
 
-        vertx.createHttpServer().requestHandler(router).listen(8080).onSuccess(ok -> System.out.println("Server listening on PORT 8080"));
+        vertx.createHttpServer().requestHandler(router)
+                .listen(8080).onSuccess(ok -> System.out.println("Server listening on PORT 8080"));
     }
 
     private static void handleLogin(RoutingContext context) {
